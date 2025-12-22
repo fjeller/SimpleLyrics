@@ -10,6 +10,11 @@ using System.Text;
 
 namespace SimpleLyrics.Core.Services;
 
+/// ==============================================================================================================================
+/// <summary>
+/// Implements song business logic operations.
+/// </summary>
+/// ==============================================================================================================================
 public class SongService : ISongService
 {
 	#region Fields
@@ -21,6 +26,9 @@ public class SongService : ISongService
 
 	#region Public Methods
 
+	/// ==============================================================================================================================
+	/// <inheritdoc/>
+	/// ==============================================================================================================================
 	public async Task<List<SongModel>> GetSongsAsync( string? filter )
 	{
 		IEnumerable<SongData> songs = await _songRepository.GetSongsAsync( filter );
@@ -29,6 +37,9 @@ public class SongService : ISongService
 		return result;
 	}
 
+	/// ==============================================================================================================================
+	/// <inheritdoc/>
+	/// ==============================================================================================================================
 	public async Task<SongModel?> GetSong( int songId )
 	{
 		SongData? currentSong = await _songRepository.GetSongAsync( songId );
@@ -42,6 +53,9 @@ public class SongService : ISongService
 		return result;
 	}
 
+	/// ==============================================================================================================================
+	/// <inheritdoc/>
+	/// ==============================================================================================================================
 	public async Task<SongResult> StoreSong( SongModel model )
 	{
 		SongData? data = _mapper.Map<SongData>( model );
@@ -51,6 +65,9 @@ public class SongService : ISongService
 		return result;
 	}
 
+	/// ==============================================================================================================================
+	/// <inheritdoc/>
+	/// ==============================================================================================================================
 	public async Task<SongResult> DeleteSong( int songId )
 	{
 		SongResult result = await _songRepository.DeleteSongAsync( songId );
@@ -62,6 +79,13 @@ public class SongService : ISongService
 
 	#region Constructors
 
+	/// ==============================================================================================================================
+	/// <summary>
+	/// Initializes a new instance of the <see cref="SongService"/> class.
+	/// </summary>
+	/// <param name="songRepository">The repository for song data access operations.</param>
+	/// <param name="mapper">The object mapper for converting between data objects and models.</param>
+	/// ==============================================================================================================================
 	public SongService( ISongRepository songRepository, ISimpleMapper mapper )
 	{
 		_songRepository = songRepository;
