@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="SimpleLyrics.Contracts/SimpleLyrics.Contracts.csproj" />
+  <Project Path="SimpleLyrics.Core/SimpleLyrics.Core.csproj" />
+  <Project Path="SimpleLyrics.Data.SqlServer/SimpleLyrics.Data.SqlServer.csproj" />
+  <Project Path="SimpleLyrics/SimpleLyrics.csproj" />
+</Solution>
