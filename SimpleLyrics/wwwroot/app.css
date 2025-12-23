@@ -1,4 +1,5 @@
-@import '_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css';
+﻿@import '_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css';
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&display=swap');
 
 body {
     --body-font: "Segoe UI Variable", "Segoe UI", sans-serif;
@@ -8,8 +9,9 @@ body {
     margin: 0;
 }
 
-.navmenu-icon {
-    display: none;
+.song-header {
+	font-size: 1.5rem;
+	font-weight: 400;
 }
 
 .main {
@@ -25,7 +27,7 @@ body {
 }
 
 .content {
-    padding: 0.5rem 1.5rem;
+    padding: 0;
     align-self: stretch !important;
     width: 100%;
 }
@@ -136,17 +138,163 @@ footer {
         content: var(--blazor-load-percentage-text, "Loading");
     }
 
-code {
-    color: #c02d76;
+
+.inner-content {
+	width: 100%;
+}
+
+.sub-header {
+	border-bottom: 1px solid var(--neutral-base-color);
+	margin-bottom: 2rem;
+	padding: 0.5rem 0;
+}
+
+.sub-header .inner-content {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	column-gap: 1rem;
+}
+
+.song-grid-container {
+	height: calc(100dvh - 86px - 2rem - 120px);
+	overflow: auto;
+}
+
+.filter-container {
+	margin: 0 auto 1rem auto;
+	width: 90%;
+
+}
+
+.header-gutters {
+	margin: 0.5rem 3rem 0.5rem 0.5rem !important;
+}
+
+.print-page {
+	background: white;
+	width: 21cm;
+	min-height: 29.7cm;
+	padding: 1cm;
+	margin: 1cm auto;
+	border: 1px #D3D3D3 solid;
+	border-radius: 5px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+}
+
+.song-text {
+	font-family: 'Inconsolata', 'Courier New', Courier, monospace !important;
+	white-space: pre-wrap;
+	margin-top: 20px;
+}
+
+.songtext-area {
+	width: 100%;
+	font-family: 'Inconsolata', 'Courier New', Courier, monospace !important;
+}
+
+@media print {
+
+	@page {
+		size: A4 portrait;
+		margin: 0;
+	}
+
+	body, .print-page {
+		margin: 0;
+		border: initial;
+		border-radius: initial;
+		width: initial;
+		min-height: initial;
+		box-shadow: initial;
+		background: initial;
+		page-break-after: always;
+	}
+
+	.print-container {
+		width: 210mm;
+		box-sizing: border-box;
+		padding: 20mm;
+		container-type: inline-size;
+		font-family: 'Inconsolata', 'Courier New', Courier, monospace;
+		font-size: clamp(1rem, 2cqi, 2rem);
+		line-height: 1.5;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+	}
+
+	@container (min-width: 150mm) {
+		.print-container {
+			font-size: clamp(1.2rem, 2.5cqi, 2.5rem);
+		}
+	}
+
+	@container (min-width: 170mm) {
+		.print-container {
+			font-size: clamp(1.4rem, 3cqi, 3rem);
+		}
+	}
+
+	.print-container h1 {
+		font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
+		font-size: clamp(1.5rem, 4cqi, 3.5rem);
+		line-height: 1.2;
+		margin-bottom: 1rem;
+		font-weight: 600;
+	}
+
+	.song-text {
+		font-family: 'Inconsolata', 'Courier New', Courier, monospace !important;
+		white-space: pre-wrap !important;
+		word-wrap: break-word !important;
+		margin-top: 20px;
+	}
+
+	@supports not (container-type: inline-size) {
+		.print-container {
+			font-size: clamp(1rem, 1.5vw + 0.5rem, 2rem);
+		}
+
+		.print-container h1 {
+			font-size: clamp(1.5rem, 2.5vw + 0.5rem, 3.5rem);
+		}
+	}
+}
+
+@media (min-width: 1280px) {
+
+	.inner-content {
+		width: 1200px;
+		margin: auto;
+	}
+
+	.header-gutters {
+		margin: 0.5rem 1.5rem !important;
+	}
+
+}
+
+@media (min-width: 1920px){
+
+	.inner-content {
+		width: 1440px;
+		margin: auto;
+	}
+
+	.header-gutters {
+		margin: 0.5rem 1.5rem !important;
+	}
+
 }
 
 @media (max-width: 600px) {
     .header-gutters {
-        margin: 0.5rem 3rem 0.5rem 1.5rem !important;
+        margin: 0.5rem 3rem 0.5rem 0.5rem !important;
     }
 
     [dir="rtl"] .header-gutters {
-        margin: 0.5rem 1.5rem 0.5rem 3rem !important;
+        margin: 0.5rem 0.5rem 0.5rem 3rem !important;
     }
 
     .main {
@@ -166,54 +314,6 @@ code {
         #main-menu > div:first-child:is(.expander) {
             display: none;
         }
-
-    .navmenu {
-        width: 100%;
-    }
-
-    #navmenu-toggle {
-        appearance: none;
-    }
-
-        #navmenu-toggle ~ nav {
-            display: none;
-        }
-
-        #navmenu-toggle:checked ~ nav {
-            display: block;
-        }
-
-    .navmenu-icon {
-        cursor: pointer;
-        z-index: 10;
-        display: block;
-        position: absolute;
-        top: 15px;
-        left: unset;
-        right: 20px;
-        width: 20px;
-        height: 20px;
-        border: none;
-    }
-
-    [dir="rtl"] .navmenu-icon {
-        left: 20px;
-        right: unset;
-    }
 }
 
-/* Table */
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-    table td,
-    table th {
-        padding: var(--spacingVerticalS) var(--spacingHorizontalM);
-        text-align: left;
-        vertical-align: middle;
-        border-bottom: calc(var(--stroke-width) * 1px) solid var(--neutral-stroke-divider-rest);
-    }

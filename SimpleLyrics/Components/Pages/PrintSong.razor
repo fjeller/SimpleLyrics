@@ -1,0 +1,31 @@
+﻿@page "/print/{SongId:int}"
+@using SimpleLyrics.Contracts.Models
+@using SimpleLyrics.Contracts.Services
+@layout PrintLayout
+
+@inject ISongService SongService
+
+@if ( Song is not null )
+{
+
+	<h1>@Song.Title</h1>
+	<div class="song-text">
+		@Song.Text
+	</div>
+}
+
+@code {
+	[Parameter]
+	public int SongId { get; set; }
+
+	public SongModel? Song { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		if ( SongId <= 0 )
+		{
+			return;
+		}
+		Song = await SongService.GetSong( SongId );
+	}
+}
