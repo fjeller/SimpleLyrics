@@ -3,6 +3,7 @@
 @using SimpleLyrics.Components.Dialogs
 @using SimpleLyrics.Contracts.Models
 @using SimpleLyrics.Contracts.Services
+@using System.Text.Json
 @inject ISongService SongService
 @inject IDialogService DialogService
 @inject IJSRuntime JsRuntime
@@ -13,7 +14,7 @@
 
 	<FluentButton Appearance="Appearance.Accent" OnClick="AddSong">Add Song</FluentButton>
 	<FluentSpacer />
-	<FluentButton Appearance="Appearance.Outline">Export Songs</FluentButton>
+	<FluentButton Appearance="Appearance.Outline" OnClick="ExportSongsAsync">Export Songs</FluentButton>
 	<FluentButton Appearance="Appearance.Outline">Import Songs</FluentButton>
 
 </SubHeader>
@@ -98,6 +99,15 @@
 	private async Task AddSong()
 	{
 		await EditSong( new SongModel() );
+	}
+
+	private async Task ExportSongsAsync()
+	{
+		List<SongModel> songs = await SongService.GetSongsAsync( null );
+
+		string json = JsonSerializer.Serialize( songs, new JsonSerializerOptions { WriteIndented = true } );
+
+		await JsRuntime.InvokeVoidAsync( "downloadFile", "songs.json", "application/json", json );
 	}
 
 	private async Task DisplaySong(SongModel song)

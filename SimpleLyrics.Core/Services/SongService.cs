@@ -75,6 +75,16 @@ public class SongService : ISongService
 		return result;
 	}
 
+	/// ==============================================================================================================================
+	/// <inheritdoc/>
+	/// ==============================================================================================================================
+	public async Task<IEnumerable<string>> GetCategoriesAsync()
+	{
+		IEnumerable<string> categories = await _songRepository.GetCategoriesAsync();
+
+		return categories;
+	}
+
 	#endregion
 
 	#region Constructors

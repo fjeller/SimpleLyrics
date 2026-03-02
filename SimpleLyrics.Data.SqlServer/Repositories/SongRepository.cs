@@ -214,6 +214,32 @@ public class SongRepository : ISongRepository
 		}
 	}
 
+	/// =============================================================================================================================
+	/// <inheritdoc/>
+	/// =============================================================================================================================
+	public async Task<IEnumerable<string>> GetCategoriesAsync()
+	{
+		await CreateDataContextAsync();
+
+		try
+		{
+			List<string> categories = await DataContext.Songs
+				.Where( s => s.Category != null && s.Category != string.Empty )
+				.Select( s => s.Category! )
+				.Distinct()
+				.OrderBy( c => c )
+				.ToListAsync();
+
+			return categories;
+		}
+		catch ( Exception ex )
+		{
+			_logger.LogError( ex, "{Classname}.{Methodname}: Error while loading categories from database", nameof( SongRepository ), nameof( GetCategoriesAsync ) );
+
+			return [];
+		}
+	}
+
 	#endregion
 
 	#region Constructors

@@ -51,4 +51,12 @@ public interface ISongService
 	/// <returns>A <see cref="SongResult"/> indicating the outcome of the operation.</returns>
 	/// ==============================================================================================================================
 	Task<SongResult> DeleteSong( int songId );
+
+	/// ==============================================================================================================================
+	/// <summary>
+	/// Retrieves all distinct categories currently assigned to songs.
+	/// </summary>
+	/// <returns>A collection of distinct category names sorted alphabetically.</returns>
+	/// ==============================================================================================================================
+	Task<IEnumerable<string>> GetCategoriesAsync();
 }

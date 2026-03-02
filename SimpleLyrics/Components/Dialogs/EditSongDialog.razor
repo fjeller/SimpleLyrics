@@ -1,11 +1,25 @@
 ﻿@using SimpleLyrics.Contracts.Models
+@using SimpleLyrics.Contracts.Services
 @implements IDialogContentComponent<SongModel>
 
+@inject ISongService SongService
+
 <FluentDialogBody>
-	<FluentTextField @bind-Value="@Content.Title" Style="width:100%" Autofocus="true">Title:</FluentTextField>
-	<FluentTextField @bind-Value="@Content.Category" Style="width:100%">Category:</FluentTextField>
-	<FluentTextField @bind-Value="@Content.Interpreter" Style="width:100%">Interpreter</FluentTextField>
-	<FluentNumberField @bind-Value="@Content.Capo" Style="width:100px">Capo</FluentNumberField>
+	<div style="display:flex; column-gap:1rem;margin-bottom:1rem;">
+		<FluentTextField @bind-Value="@Content.Title" Style="width:70%" Autofocus="true">Title:</FluentTextField>
+		<FluentNumberField @bind-Value="@Content.Capo" Style="width:30%">Capo</FluentNumberField>
+	</div>
+	<div style="display:flex; column-gap:1rem; margin-bottom:1rem;">
+		<div style="width:50%"> <!-- Tricky ... -->
+			<FluentCombobox Items="@_categories"
+			                TOption="string"
+			                Label="Category:"
+			                @bind-Value="@Content.Category"
+			                Autocomplete="ComboboxAutocomplete.Both"
+			                Style="width:100%"></FluentCombobox>
+		</div>
+		<FluentTextField @bind-Value="@Content.Interpreter" Style="width:50%">Interpreter</FluentTextField>
+	</div>
 	<FluentTextArea @bind-Value="@Content.Text" Rows="15" Class="songtext-area">Text</FluentTextArea>
 </FluentDialogBody>
 
@@ -21,6 +35,13 @@
 
 	[CascadingParameter]
 	public FluentDialog Dialog { get; set; } = null!;
+
+	private IEnumerable<string> _categories = [];
+
+	protected override async Task OnInitializedAsync()
+	{
+		_categories = await SongService.GetCategoriesAsync();
+	}
 
 	private async Task SaveAsync()
 	{

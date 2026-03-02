@@ -52,4 +52,12 @@ public interface ISongRepository
 	/// <returns>A <see cref="SongResult"/> indicating the outcome of the operation.</returns>
 	/// ==============================================================================================================================
 	Task<SongResult> DeleteSongAsync( int songId );
+
+	/// ==============================================================================================================================
+	/// <summary>
+	/// Retrieves all distinct categories currently assigned to songs in the repository.
+	/// </summary>
+	/// <returns>A collection of distinct category names sorted alphabetically.</returns>
+	/// ==============================================================================================================================
+	Task<IEnumerable<string>> GetCategoriesAsync();
 }
