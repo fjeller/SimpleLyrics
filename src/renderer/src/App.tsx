@@ -4,6 +4,7 @@ import type { CategoryList, CurrentFile, InterpreterList, MenuCommand, SongFilte
 import { errorMessage, unwrap } from './api'
 import { ConfirmDialog } from './components/Dialogs'
 import { ChordLookup } from './components/ChordLookup'
+import { CircleOfFifths } from './components/CircleOfFifths'
 import { NameEditDialog } from './components/NameEditDialog'
 import { SearchBar } from './components/SearchBar'
 import { Sidebar } from './components/Sidebar'
@@ -22,7 +23,7 @@ type DialogState =
   | { kind: 'delete-item'; target: Target; id: number; name: string; songCount: number }
   | { kind: 'delete-song'; song: { id: number; title: string } }
 
-type View = { mode: 'list' } | { mode: 'edit'; songId: number | null } | { mode: 'preview'; songId: number; print: boolean } | { mode: 'chords' }
+type View = { mode: 'list' } | { mode: 'edit'; songId: number | null } | { mode: 'preview'; songId: number; print: boolean } | { mode: 'chords' } | { mode: 'circle' }
 
 function plural(count: number, noun: string): string {
   return `${count} ${noun}${count === 1 ? '' : 's'}`
@@ -137,7 +138,8 @@ export default function App(): React.JSX.Element | null {
   }, [filePath, filterKey, reloadToken, showError])
 
   const selectedSong = songs.find((s) => s.id === selectedSongId)
-  const activeSongId = view.mode === 'list' ? selectedSong?.id : view.mode === 'chords' ? undefined : (view.songId ?? undefined)
+  const activeSongId =
+    view.mode === 'list' ? selectedSong?.id : view.mode === 'edit' || view.mode === 'preview' ? (view.songId ?? undefined) : undefined
   const activeSong = songs.find((s) => s.id === activeSongId)
 
   async function printPage(): Promise<void> {
@@ -166,6 +168,7 @@ export default function App(): React.JSX.Element | null {
     else if (command === 'print-song' && file) printSong()
     else if (command === 'focus-search' && file && view.mode === 'list') searchRef.current?.focus()
     else if (command === 'show-chords' && view.mode !== 'edit') setView({ mode: 'chords' })
+    else if (command === 'show-circle-of-fifths' && view.mode !== 'edit') setView({ mode: 'circle' })
   }
   useEffect(() => window.api.onMenuCommand((command) => commandHandler.current(command)), [])
 
@@ -236,6 +239,7 @@ export default function App(): React.JSX.Element | null {
         onPreviewSong={previewSong}
         onPrintSong={printSong}
         onChordLookup={() => setView({ mode: 'chords' })}
+        onCircleOfFifths={() => setView({ mode: 'circle' })}
         onThemeChange={changeTheme}
       />
       <div className="shell-content">{content}</div>
@@ -253,6 +257,7 @@ export default function App(): React.JSX.Element | null {
   )
 
   if (view.mode === 'chords') return shell(<ChordLookup onClose={() => setView({ mode: 'list' })} />)
+  if (view.mode === 'circle') return shell(<CircleOfFifths onClose={() => setView({ mode: 'list' })} />)
 
   if (!file) {
     return shell(

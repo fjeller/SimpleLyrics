@@ -35,7 +35,7 @@ The main process also pushes events to the renderer: `menu:command` for menu act
 
 ## Renderer state
 
-`App.tsx` holds the state and switches between four views: list, edit, preview and chord lookup. The editor replaces the whole window content instead of opening in a dialog. This keeps the form large enough for chords and lyrics and avoids half-saved states: there are only Cancel and Save. The chord lookup is opened by the menu command `show-chords` and is ignored while the editor is open.
+`App.tsx` holds the state and switches between five views: list, edit, preview, chord lookup and circle of fifths. The editor replaces the whole window content instead of opening in a dialog. This keeps the form large enough for chords and lyrics and avoids half-saved states: there are only Cancel and Save. The chord lookup and the circle of fifths are opened by the menu commands `show-chords` and `show-circle-of-fifths` or by toolbar buttons, and are ignored while the editor is open.
 
 ## Chord diagrams
 

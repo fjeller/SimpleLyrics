@@ -21,7 +21,7 @@ The automated tests cover the data layer, not these areas:
 - The import conflict handling is "skip" only.
 - Chord diagrams cover only standard chords (see [Chord notation and diagrams](reference-chord-notation-and-diagrams.md)). Extended chords such as `9`, `m7b5` or `m6`, and most slash chords, show "No diagram".
 - The chord lookup lists the open shape and the E and A barre shapes only. There are no C, D or G shapes and no alternative voicings.
-- The chord lookup page has no keyboard shortcut.
+- The chord lookup and circle of fifths pages have no keyboard shortcut.
 
 ## Ideas
 
@@ -36,6 +36,8 @@ The automated tests cover the data layer, not these areas:
 | More voicings | Add the C, D and G shapes and alternative fingerings of the same chord. |
 | Pick a diagram | Let the user choose which voicing is shown in a song's preview. |
 | Capo in the diagrams | Show the capo on the diagrams, or the sounding chord names. |
+| Circle of fifths for a song | Detect the key of a song from its chords and highlight the song's chords on the circle. |
+| Circle and chord diagrams | Click a chord on the circle of fifths to open its diagram. |
 
 ## Related
 

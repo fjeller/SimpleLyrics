@@ -63,6 +63,7 @@ export function buildMenu(getWindow: WindowGetter, hasOpenFile: boolean): void {
         { label: 'Light Theme', click: () => send('theme-light') },
         { type: 'separator' },
         { label: 'Chord Lookup', click: () => send('show-chords') },
+        { label: 'Circle of Fifths', click: () => send('show-circle-of-fifths') },
         { type: 'separator' },
         { role: 'togglefullscreen' },
         ...(app.isPackaged ? [] : ([{ type: 'separator' }, { role: 'reload' }, { role: 'toggleDevTools' }] as MenuItemConstructorOptions[]))

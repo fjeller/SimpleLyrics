@@ -13,6 +13,7 @@ The UI language is English.
 - Preview and print of a single song (black on white, A4 layout, auto-fitted font size).
 - Chord diagrams for the chords used in a song, shown above the chords text in the preview and print-out.
 - A chord lookup page with the standard fingerings of every chord, including barre chords.
+- A circle of fifths page with the chords of every key and an explanation of how to use it.
 - Export and import of songs as JSON.
 - Dark (default) and light theme.
 

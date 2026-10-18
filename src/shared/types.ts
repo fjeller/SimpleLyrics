@@ -98,7 +98,7 @@ export interface CurrentFile {
   name: string
 }
 
-export type MenuCommand = 'new-song' | 'focus-search' | 'theme-dark' | 'theme-light' | 'preview-song' | 'print-song' | 'show-chords'
+export type MenuCommand = 'new-song' | 'focus-search' | 'theme-dark' | 'theme-light' | 'preview-song' | 'print-song' | 'show-chords' | 'show-circle-of-fifths'
 
 export const EXPORT_FORMAT = 'simplelyrics-songs'
 export const EXPORT_VERSION = 1

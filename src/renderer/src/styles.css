@@ -742,6 +742,133 @@ textarea {
   color: var(--text-muted);
 }
 
+/* Circle of fifths page */
+.cof-page {
+  max-width: 760px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.cof-hint {
+  margin: 0 0 8px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.cof-svg {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto 16px;
+  user-select: none;
+}
+
+.cof-wedge {
+  cursor: pointer;
+  outline: none;
+}
+
+.cof-wedge path {
+  fill: var(--surface-alt);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+}
+
+.cof-wedge:hover path {
+  fill: var(--hover);
+}
+
+.cof-wedge.related path {
+  fill: color-mix(in srgb, var(--accent) 30%, var(--surface));
+}
+
+.cof-wedge.tonic path {
+  fill: var(--accent);
+}
+
+.cof-wedge:focus-visible path {
+  stroke: var(--text);
+  stroke-width: 3;
+}
+
+.cof-wedge text,
+.cof-centre-text {
+  fill: var(--text);
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.cof-wedge.cof-signature text {
+  fill: var(--text-muted);
+}
+
+.cof-wedge.tonic text {
+  fill: var(--accent-text);
+}
+
+.cof-centre {
+  fill: var(--surface);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+}
+
+.cof-selected h2,
+.cof-help h2 {
+  margin: 8px 0;
+  font-size: 1.3em;
+}
+
+.cof-help {
+  margin-top: 28px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.cof-help h3 {
+  margin: 20px 0 6px;
+  font-size: 1.05em;
+}
+
+.cof-help p,
+.cof-help ul,
+.cof-help ol {
+  margin: 6px 0;
+}
+
+.cof-help li {
+  margin: 4px 0;
+}
+
+.cof-chords {
+  width: 100%;
+  margin: 10px 0;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.cof-chords caption {
+  padding-bottom: 4px;
+  text-align: left;
+  color: var(--text-muted);
+}
+
+.cof-chords th,
+.cof-chords td {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+}
+
+.cof-chords th {
+  background: var(--surface-alt);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.cof-chords td {
+  font-weight: 600;
+}
+
 .sheet-chords,
 .sheet-text {
   margin: 0;

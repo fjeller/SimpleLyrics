@@ -9,6 +9,7 @@
 | Editor | Replaces the whole window content while a song is created or edited. |
 | Preview | Print-style sheet of the selected song. |
 | Chord lookup | Page with chord diagrams. Opened from **View > Chord Lookup**; works with or without an open file. |
+| Circle of fifths | Page with an interactive circle of fifths and an explanation. Opened from **View > Circle of Fifths**; works with or without an open file. |
 
 ## Toolbar
 
@@ -18,6 +19,7 @@
 | Left | New song, Edit song, Delete song | Edit and Delete need a selected song. |
 | Left | Preview song, Print song | Need a selected song. |
 | Left | Chord lookup | Opens the [chord lookup page](#chord-lookup-page). Works without an open file. |
+| Left | Circle of fifths | Opens the [circle of fifths page](#circle-of-fifths-page). Works without an open file. |
 | Right | Export songs, Import songs | JSON, see [Export file format](reference-export-format.md). |
 | Right | Dark / light switch | Theme is saved in the settings. |
 
@@ -30,9 +32,9 @@ While the editor is open, all buttons are disabled, except Delete (for an existi
 | File | New File..., Open File..., Open Recent, Save File As..., Export Songs as JSON..., Import Songs from JSON..., Quit (Close on macOS) |
 | Edit | Standard edit commands |
 | Songs | New Song, Preview Song, Print Song..., Search |
-| View | Dark Theme, Light Theme, Chord Lookup, Toggle Full Screen. In development builds also Reload and Toggle Developer Tools. |
+| View | Dark Theme, Light Theme, Chord Lookup, Circle of Fifths, Toggle Full Screen. In development builds also Reload and Toggle Developer Tools. |
 
-Items that work on songs and the file commands Save As, Export and Import are disabled while no file is open. Chord Lookup is always enabled, but is ignored while a song is being edited, so unsaved changes are not lost.
+Items that work on songs and the file commands Save As, Export and Import are disabled while no file is open. Chord Lookup and Circle of Fifths are always enabled, but are ignored while a song is being edited, so unsaved changes are not lost.
 
 ## Keyboard shortcuts
 
@@ -114,6 +116,25 @@ Open it with **View > Chord Lookup**. Close it with the **Close** button or `Esc
 | Body | One block per root, with the groups **Major** and **Minor**. Each diagram is labelled **Open** or **Fret N**. |
 
 With a base chord selected, only that root is shown. With **None (all chords)**, all 12 roots are listed. See [Chord notation and diagrams](reference-chord-notation-and-diagrams.md#chord-lookup-contents) for the chord types in each group.
+
+## Circle of fifths page
+
+Open it with **View > Circle of Fifths** or the toolbar button. Close it with the **Close** button or `Esc`. The page teaches the circle of fifths, so it contains its own explanation.
+
+| Area | Description |
+|---|---|
+| Header | Title "Circle of fifths" on the left, **Close** button on the right. |
+| Circle | Three rings with 12 segments each: the major keys (outer ring), the relative minor keys (middle ring) and the key signature (inner ring). The bottom segment shows both spellings, F♯/G♭ and D♯m/E♭m. |
+| Key details | For the selected key: its key signature and two tables with the seven chords of the key and their Roman numerals, once read as major (I ii iii IV V vi vii°) and once as the relative minor (i ii° III iv v VI VII). |
+| Explanation | How to read the circle, find the chords of a key, find the key of a song, common progressions, transposing and using a capo. |
+
+Selecting a key:
+
+- Click any segment of a key, or focus a major key with `Tab` and press `Enter` or `Space`. C major is selected when the page opens.
+- The selected key and its relative minor are highlighted brightly. The neighbouring keys (IV and V) and the minor chords below the three (ii, iii, vi) are highlighted in a lighter tone. Together these are the six chords of the key; the diminished vii° chord is only listed in the tables.
+- The centre of the circle shows the selected major key.
+
+The data comes from [src/shared/circleOfFifths.ts](../src/shared/circleOfFifths.ts).
 
 ## Theme
 

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { Theme } from '../../../shared/types'
-import { ChordLookupIcon, DeleteSongIcon, EditSongIcon, ExportSongsIcon, ImportSongsIcon, MoonIcon, NewFileIcon, NewSongIcon, OpenFileIcon, PreviewSongIcon, PrintSongIcon, SaveFileAsIcon, SunIcon } from './Icons'
+import { ChordLookupIcon, CircleOfFifthsIcon, DeleteSongIcon, EditSongIcon, ExportSongsIcon, ImportSongsIcon, MoonIcon, NewFileIcon, NewSongIcon, OpenFileIcon, PreviewSongIcon, PrintSongIcon, SaveFileAsIcon, SunIcon } from './Icons'
 
 interface ToolbarProps {
   theme: Theme
@@ -20,6 +20,7 @@ interface ToolbarProps {
   onPreviewSong: () => void
   onPrintSong: () => void
   onChordLookup: () => void
+  onCircleOfFifths: () => void
   onThemeChange: (theme: Theme) => void
 }
 
@@ -80,6 +81,9 @@ export function Toolbar(props: ToolbarProps): React.JSX.Element {
 
       <IconButton label="Chord lookup" disabled={locked} onClick={props.onChordLookup}>
         <ChordLookupIcon />
+      </IconButton>
+      <IconButton label="Circle of fifths" disabled={locked} onClick={props.onCircleOfFifths}>
+        <CircleOfFifthsIcon />
       </IconButton>
 
       <span className="toolbar-spacer" />
