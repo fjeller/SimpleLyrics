@@ -1,0 +1,31 @@
+appId: com.simplelyrics.app
+productName: SimpleLyrics
+directories:
+  buildResources: build
+files:
+  - out/**
+  - package.json
+extraResources:
+  - from: drizzle
+    to: drizzle
+asarUnpack:
+  - '**/*.node'
+fileAssociations:
+  - ext: sng
+    name: SimpleLyrics song file
+    description: SimpleLyrics song file
+    role: Editor
+win:
+  target: nsis
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+mac:
+  target: dmg
+  category: public.app-category.music
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Audio
+  maintainer: SimpleLyrics

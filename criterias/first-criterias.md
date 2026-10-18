@@ -1,0 +1,20 @@
+ok, let's start with the specifics:
+- We'll use Electron / vite / typescript / react.
+- also, better-sqlite3 as the sqlite driver.
+- Drizzle ORM is fine.
+- The program will mainly be for guitar players who want to store their songs on their computer.
+- We will have multiple tables. 
+	- First a table for categories. Simply the name of the category and an id. Attention: Later on, categories are not mandatory, which means that a song can have no assigned category - these must still be displayable in the frontend, e.g. with a virtual category "empty"
+	- Second, a table with interpreters. This table will have an id and the name of the interpreter. It will later be related to the main song table using an n:m relation (one interpreter -> multiple songs, one song -> multiple interpreters).
+	- The main table will be the songs, with the following data: Title, Key (the "key" the song is in, not the primary key of the table; usually maximum of 2 chars), Original Key (the key the song is originally in, also maximum of 2 chars), FirstLine (the first line of the songtext, 100 chars), Category-relation (0:n relation to the table category, meaning a song does not have to have a category), Interpreter-relation (n:m relation to the interpreters table, but again, I want to be able to create a song without interpreters as well if I don't know the interpreter), Capo (a number from 0-12 with 0 as the default if I enter nothing); the songtext (unlimited text, in SQL Server it would be NVARCHAR(MAX)), and a field for the chords used (multiline-text, 2000 chars)
+- The frontend will be dark mode and light mode, with dark mode as the default
+- in the frontend, I want to have 
+	- a list of categories, so I can choose a category and see all the songs assigned (must include the virtual "empty" category)
+	- a list of interpreters, so I can choose an interpreter and see all the songs of this interpreter. Must include the possibility to choose "no interpreter, because songs do not always have an interpreter.
+	- those two lists can be mutually exclusive, meaning we can have a tab where I can choose "Categories" or "Interpreters", and when I choose a category, the "interpreters"-filter does not apply anymore and vice-versa. We only always display one of the lists, in a sidebar, always visible.
+	- The main view should show the songs. If possible with the following information: Title - Interpreter(s) - Category - Capo - Firstline. It would be nice if we could display everything in one line except the firstline-data, which should go in a second line but in slightly smaller text. It should however still be a scrollable table.
+	- above the main view I would like to have a search box, so that I can search for songs. Search should start at 3 entered chars, and be immediate (when I press a key). The search should be a "contains"-search in Title and firstline.
+	
+That is the first draft, still without the printing - we will do that later. When you start planning, you MUST make sure that the application compiles with the "better-sqlite3"-driver - everything should be correctly installed, so it should work, but check that first. I had problems before, and we don't need to implement anything if that doesn't work.
+
+We will of course need some functionality, like add, edit, delete Songs (delete only with cofirmation); also add, edit, delete Categories (delete with confirmation, songs in the category then move to the virtual "empty"-category) and also add/edit/delete interpreters (delete with confirmation). I would like to use react-select or a similar component for the entering of interpreters, and when a new one is entered, it should automatically be created including the necessary relation to the song. Similar for categories - I want, when adding or editing a song, to be able to just enter a category that does not exist yet, and it is automatically created. 
