@@ -78,6 +78,15 @@ export const PreviewSongIcon = (): React.JSX.Element => (
   </Icon>
 )
 
+export const ChordLookupIcon = (): React.JSX.Element => (
+  <Icon>
+    <path d="M6 4v16M12 4v16M18 4v16" />
+    <path d="M6 4h12M6 10h12M6 16h12" />
+    <circle cx="12" cy="13" r="2.2" fill="currentColor" />
+    <circle cx="18" cy="7" r="2.2" fill="currentColor" />
+  </Icon>
+)
+
 export const PrintSongIcon = (): React.JSX.Element => (
   <Icon>
     <path d="M6 9V3h12v6" />

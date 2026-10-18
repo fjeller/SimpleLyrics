@@ -17,6 +17,7 @@
 | Left | New file, Open file, Save file as | Save as copies the open file (SQLite `backup`). |
 | Left | New song, Edit song, Delete song | Edit and Delete need a selected song. |
 | Left | Preview song, Print song | Need a selected song. |
+| Left | Chord lookup | Opens the [chord lookup page](#chord-lookup-page). Works without an open file. |
 | Right | Export songs, Import songs | JSON, see [Export file format](reference-export-format.md). |
 | Right | Dark / light switch | Theme is saved in the settings. |
 

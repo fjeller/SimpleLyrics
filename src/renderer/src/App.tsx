@@ -235,6 +235,7 @@ export default function App(): React.JSX.Element | null {
         onDeleteSong={() => activeSong && setDialog({ kind: 'delete-song', song: activeSong })}
         onPreviewSong={previewSong}
         onPrintSong={printSong}
+        onChordLookup={() => setView({ mode: 'chords' })}
         onThemeChange={changeTheme}
       />
       <div className="shell-content">{content}</div>
