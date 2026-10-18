@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "Song and lyrics library for guitar players",
   "main": "./out/main/index.js",
-  "author": "SimpleLyrics",
+  "author": "Frank Eller <fe@frankeller.de>",
+  "homepage": "https://github.com/fjeller/SimpleLyrics",
   "license": "MIT",
   "private": true,
   "scripts": {

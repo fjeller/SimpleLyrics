@@ -28,4 +28,4 @@ linux:
     - AppImage
     - deb
   category: Audio
-  maintainer: SimpleLyrics
+  maintainer: Frank Eller <fe@frankeller.de>
