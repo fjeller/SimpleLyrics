@@ -4,7 +4,7 @@
   "description": "Song and lyrics library for guitar players",
   "main": "./out/main/index.js",
   "author": "SimpleLyrics",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "electron-vite dev",
