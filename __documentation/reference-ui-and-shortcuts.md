@@ -66,6 +66,8 @@ Double-clicking a song also opens the editor.
 
 Rows have two lines: title, interpreters, category and capo; below that, the first line in smaller text. The list is sorted by title with Unicode-aware ordering.
 
+![Song list with sidebar](images/song-list.png)
+
 ## Search
 
 - Starts at 3 characters (`MIN_SEARCH_LENGTH`). Shorter input falls back to the sidebar selection.
@@ -88,6 +90,8 @@ Rows have two lines: title, interpreters, category and capo; below that, the fir
 | Song text | Textarea | Unlimited |
 
 Buttons: **Cancel** and **Save**.
+
+![Song editor](images/song-editor.png)
 
 ## Preview and print sheet
 
@@ -120,6 +124,8 @@ With a base chord selected, only that root is shown. With **None (all chords)**,
 ## Circle of fifths page
 
 Open it with **View > Circle of Fifths** or the toolbar button. Close it with the **Close** button or `Esc`. The page teaches the circle of fifths, so it contains its own explanation.
+
+![Circle of fifths page with G major selected](images/circle-of-fifths.png)
 
 | Area | Description |
 |---|---|

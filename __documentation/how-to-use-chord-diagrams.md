@@ -43,6 +43,8 @@ The **Chords used** section above the chords text now shows one diagram for each
 
 Select **None (all chords)** to see all 12 roots one below the other.
 
+![Chord lookup page for A](images/chord-lookup.png)
+
 The lookup page does not change a song. Use it to decide which shape you prefer to play, then write the chord into the song as usual.
 
 ## Print the diagrams

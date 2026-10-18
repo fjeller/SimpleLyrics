@@ -1,6 +1,6 @@
 # Tutorial: Your first song
 
-In this tutorial you create a songbook file, add your first song, find it again with the search, look at its chord diagrams, and preview and print it. You need a running copy of SimpleLyrics (see the [README](../README.md#quick-start)).
+In this tutorial you create a songbook file, add your first song, find it again with the search, look at its chord diagrams, preview and print it, and find its key with the circle of fifths. You need a running copy of SimpleLyrics (see the [README](../README.md#quick-start)).
 
 You do not need any prior knowledge of the app. The example uses "Amazing Grace", a public-domain hymn.
 
@@ -74,9 +74,20 @@ The page shows the major and minor variants of A. Chords that can be played in s
 
 3. Choose **Close** to go back.
 
+## 6. Find the key and chords with the circle of fifths
+
+1. Choose **View > Circle of Fifths**, or the toolbar button with the dial icon.
+2. Click `G` in the outer ring.
+
+The circle highlights the six chords of G major (G, C, D, Am, Bm and Em), and the page lists them below the circle, including the diminished chord. Your song uses G, C, D and Em, so it is in G major. Further down, the page explains how to read the circle, find the key of a song and transpose it.
+
+![The circle of fifths with G major selected](images/circle-of-fifths.png)
+
+3. Choose **Close** to go back.
+
 ## What you did
 
-You created a songbook, stored a song with a category and an interpreter, found it with the search, saw its chord diagrams in the preview, looked up a chord, and printed the song.
+You created a songbook, stored a song with a category and an interpreter, found it with the search, saw its chord diagrams in the preview, looked up a chord, found the key with the circle of fifths, and printed the song.
 
 ## Next steps
 
