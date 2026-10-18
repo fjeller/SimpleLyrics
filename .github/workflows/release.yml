@@ -69,4 +69,5 @@ jobs:
         with:
           files: installers/*
           draft: true
+          prerelease: true
           generate_release_notes: true
