@@ -6,7 +6,7 @@
 |---|---|
 | `npm run dev` | Development mode with HMR |
 | `npm start` | Preview of the built app (`electron-vite preview`) |
-| `npm test` | Vitest, single run (25 tests: repositories, files, export/import) |
+| `npm test` | Vitest, single run (43 tests: repositories, files, export/import, chords) |
 | `npm run typecheck` | Typecheck for main (`tsconfig.node.json`) and renderer (`tsconfig.web.json`) |
 | `npm run build` | Typecheck and production build into `out/` |
 | `npm run pack` | Build and create an unpacked Windows app in `dist/win-unpacked` |
@@ -53,11 +53,12 @@ The runtime dependencies are `better-sqlite3`, `drizzle-orm` and `zod`. React, r
 |---|---|
 | `src/preload/index.ts` | Typed `window.api` bridge |
 | `src/shared/types.ts` | DTOs, limits, API interface, export format |
+| `src/shared/chords.ts` | Chord name parser, extraction of chords from text, fingering tables and shape generation |
 | `src/renderer/src/App.tsx` | State and views (list, edit, preview) |
 | `src/renderer/src/api.ts` | Access to `window.api` |
-| `src/renderer/src/components/` | `Toolbar`, `Icons`, `Sidebar`, `SongTable`, `SongEditor`, `SongPreview`, `SearchBar`, `Dialogs`, `NameEditDialog`, `WelcomeScreen` |
+| `src/renderer/src/components/` | `Toolbar`, `Icons`, `Sidebar`, `SongTable`, `SongEditor`, `SongPreview`, `ChordDiagram`, `ChordLookup`, `SearchBar`, `Dialogs`, `NameEditDialog`, `WelcomeScreen` |
 | `src/renderer/src/styles.css` | Styles, including `@media print` |
-| `tests/` | `repositories.test.ts`, `transfer.test.ts` |
+| `tests/` | `repositories.test.ts`, `transfer.test.ts`, `chords.test.ts`, `chordLookup.test.ts` |
 | `drizzle/` | SQL migrations and snapshots |
 
 ### Configuration files

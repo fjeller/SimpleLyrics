@@ -25,6 +25,18 @@ Duplicates are songs with the same title and the same set of interpreters. Text 
 
 Invalid songs do not abort the import: valid songs are imported in one transaction and the invalid ones are reported with a reason.
 
+## Chord diagrams are generated, not stored
+
+The diagrams are drawn from the text of the song, so the song file does not store any chord data. A change to the chords text is reflected the next time the preview opens, and old songs get diagrams without a migration.
+
+**Few shapes, many chords.** Writing a fingering for every root and chord type by hand would mean about 150 entries, each a chance for a typo. Instead, the code has a short table of open-position chords that are not an E or A shape (C, D, G and a few more), plus two movable shapes per chord type, based on the E and A forms. Moving a shape up the neck gives the barre chords for every root. At fret 0 the same shapes are the open chords of E and A, so those need no table entry. The same data feeds the song preview, which uses one fingering per chord, and the lookup page, which lists all of them.
+
+**Strict and lenient reading.** Free text on a chords line, such as "A bridge to cross", would be read as the chord `A` plus words. To avoid false diagrams, a line with a label (`Verse: ...`) is read leniently, and a line without a label has to consist of chords only. The label is the user's way of saying "this line contains chords".
+
+**No guessing.** A chord that is valid but has no standard fingering, such as `Cm7b5`, is listed as "No diagram" instead of getting an approximated shape. A wrong diagram is worse than none.
+
+**Diagrams use the text colour.** The SVG draws with `currentColor`, so one component serves the dark and the light theme and prints black on white without extra CSS.
+
 ## Print sheet and font fitting
 
 The sheet uses monospace fonts, because chords are aligned above lyrics with spaces. To avoid line wrapping, which would break the alignment, the font size is calculated from the longest line so that it fits the page width, clamped between 1 rem and 1.5 rem (`MAX_FONT_REM` in `SongPreview.tsx`). The calculation assumes A4 paper with 18 mm margins (`PRINT_CONTENT_WIDTH_PX = 657`). On Letter paper the margins differ and the result has not been verified.

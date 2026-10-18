@@ -19,6 +19,9 @@ The automated tests cover the data layer, not these areas:
 - There is no app icon yet; the default Electron icon is used.
 - There is no code signing and no auto-update.
 - The import conflict handling is "skip" only.
+- Chord diagrams cover only standard chords (see [Chord notation and diagrams](reference-chord-notation-and-diagrams.md)). Extended chords such as `9`, `m7b5` or `m6`, and most slash chords, show "No diagram".
+- The chord lookup lists the open shape and the E and A barre shapes only. There are no C, D or G shapes and no alternative voicings.
+- The chord lookup page has no keyboard shortcut.
 
 ## Ideas
 
@@ -29,6 +32,10 @@ The automated tests cover the data layer, not these areas:
 | Chord transposition | Transpose chords and the key by a number of semitones. Needs a parser for chord notation. |
 | Print several songs | Print the selection or a whole category in one job. |
 | Key on the print sheet | Show the key (and original key) on the sheet next to the capo. |
+| More chord types | Add ninths, minor sixths, `m7b5` and more slash chords to the chord tables. |
+| More voicings | Add the C, D and G shapes and alternative fingerings of the same chord. |
+| Pick a diagram | Let the user choose which voicing is shown in a song's preview. |
+| Capo in the diagrams | Show the capo on the diagrams, or the sounding chord names. |
 
 ## Related
 

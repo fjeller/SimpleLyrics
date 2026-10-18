@@ -3,6 +3,7 @@ import { MIN_SEARCH_LENGTH } from '../../shared/types'
 import type { CategoryList, CurrentFile, InterpreterList, MenuCommand, SongFilter, SongListItem, Theme } from '../../shared/types'
 import { errorMessage, unwrap } from './api'
 import { ConfirmDialog } from './components/Dialogs'
+import { ChordLookup } from './components/ChordLookup'
 import { NameEditDialog } from './components/NameEditDialog'
 import { SearchBar } from './components/SearchBar'
 import { Sidebar } from './components/Sidebar'
@@ -21,7 +22,7 @@ type DialogState =
   | { kind: 'delete-item'; target: Target; id: number; name: string; songCount: number }
   | { kind: 'delete-song'; song: { id: number; title: string } }
 
-type View = { mode: 'list' } | { mode: 'edit'; songId: number | null } | { mode: 'preview'; songId: number; print: boolean }
+type View = { mode: 'list' } | { mode: 'edit'; songId: number | null } | { mode: 'preview'; songId: number; print: boolean } | { mode: 'chords' }
 
 function plural(count: number, noun: string): string {
   return `${count} ${noun}${count === 1 ? '' : 's'}`
@@ -136,7 +137,7 @@ export default function App(): React.JSX.Element | null {
   }, [filePath, filterKey, reloadToken, showError])
 
   const selectedSong = songs.find((s) => s.id === selectedSongId)
-  const activeSongId = view.mode === 'list' ? selectedSong?.id : (view.songId ?? undefined)
+  const activeSongId = view.mode === 'list' ? selectedSong?.id : view.mode === 'chords' ? undefined : (view.songId ?? undefined)
   const activeSong = songs.find((s) => s.id === activeSongId)
 
   async function printPage(): Promise<void> {
@@ -164,6 +165,7 @@ export default function App(): React.JSX.Element | null {
     else if (command === 'preview-song' && file) previewSong()
     else if (command === 'print-song' && file) printSong()
     else if (command === 'focus-search' && file && view.mode === 'list') searchRef.current?.focus()
+    else if (command === 'show-chords' && view.mode !== 'edit') setView({ mode: 'chords' })
   }
   useEffect(() => window.api.onMenuCommand((command) => commandHandler.current(command)), [])
 
@@ -248,6 +250,8 @@ export default function App(): React.JSX.Element | null {
       )}
     </div>
   )
+
+  if (view.mode === 'chords') return shell(<ChordLookup onClose={() => setView({ mode: 'list' })} />)
 
   if (!file) {
     return shell(

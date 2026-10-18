@@ -8,6 +8,7 @@
 | List | Sidebar and song list. |
 | Editor | Replaces the whole window content while a song is created or edited. |
 | Preview | Print-style sheet of the selected song. |
+| Chord lookup | Page with chord diagrams. Opened from **View > Chord Lookup**; works with or without an open file. |
 
 ## Toolbar
 
@@ -28,9 +29,9 @@ While the editor is open, all buttons are disabled, except Delete (for an existi
 | File | New File..., Open File..., Open Recent, Save File As..., Export Songs as JSON..., Import Songs from JSON..., Quit (Close on macOS) |
 | Edit | Standard edit commands |
 | Songs | New Song, Preview Song, Print Song..., Search |
-| View | Dark Theme, Light Theme, Toggle Full Screen. In development builds also Reload and Toggle Developer Tools. |
+| View | Dark Theme, Light Theme, Chord Lookup, Toggle Full Screen. In development builds also Reload and Toggle Developer Tools. |
 
-Items that work on songs and the file commands Save As, Export and Import are disabled while no file is open.
+Items that work on songs and the file commands Save As, Export and Import are disabled while no file is open. Chord Lookup is always enabled, but is ignored while a song is being edited, so unsaved changes are not lost.
 
 ## Keyboard shortcuts
 
@@ -80,7 +81,7 @@ Rows have two lines: title, interpreters, category and capo; below that, the fir
 | Capo | Number | 0–12, default 0 |
 | Category | Single select, creatable | One category or none |
 | Interpreters | Multi select, creatable | Any number |
-| Chords | Textarea, not resizable | 2000 characters |
+| Chords used | Textarea, not resizable | 2000 characters. See [Chord notation](reference-chord-notation-and-diagrams.md). |
 | Song text | Textarea | Unlimited |
 
 Buttons: **Cancel** and **Save**.
@@ -90,10 +91,28 @@ Buttons: **Cancel** and **Save**.
 - Title (26 px).
 - Interpreters on the left, "Capo: N" on the right (only if the capo is greater than 0), 14 px.
 - A rule.
-- Chords (bold, monospace).
+- **Chords used**: one chord diagram for each distinct chord found in the chords text. Hidden if no chord is found. See [Chord notation and diagrams](reference-chord-notation-and-diagrams.md).
+- Chords text (bold, monospace), exactly as entered.
 - Song text (monospace).
 
-The font size for chords and text is chosen so that the longest line fits the page width, between 1 rem and 1.5 rem. On screen the sheet follows the theme. Printing uses the system dialog, is always black on white, and uses 18 mm margins. The width calculation assumes A4.
+![Preview sheet](images/song-preview.png)
+
+The font size for chords and text is chosen so that the longest line fits the page width, between 1 rem and 1.5 rem. On screen the sheet follows the theme. Printing uses the system dialog, is always black on white, and uses 18 mm margins. The width calculation assumes A4. The chord diagrams use the text colour, so they print in black.
+
+## Chord lookup page
+
+Open it with **View > Chord Lookup**. Close it with the **Close** button or `Esc`.
+
+![Chord lookup page](images/chord-lookup.png)
+
+| Area | Description |
+|---|---|
+| Header, left | Title "Chord lookup". |
+| Header, centre | **Base chord** dropdown: None (all chords), C, D, E, F, G, A, B. |
+| Header, right | **Close** button. |
+| Body | One block per root, with the groups **Major** and **Minor**. Each diagram is labelled **Open** or **Fret N**. |
+
+With a base chord selected, only that root is shown. With **None (all chords)**, all 12 roots are listed. See [Chord notation and diagrams](reference-chord-notation-and-diagrams.md#chord-lookup-contents) for the chord types in each group.
 
 ## Theme
 

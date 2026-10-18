@@ -35,7 +35,11 @@ The main process also pushes events to the renderer: `menu:command` for menu act
 
 ## Renderer state
 
-`App.tsx` holds the state and switches between three views: list, edit and preview. The editor replaces the whole window content instead of opening in a dialog. This keeps the form large enough for chords and lyrics and avoids half-saved states: there are only Cancel and Save.
+`App.tsx` holds the state and switches between four views: list, edit, preview and chord lookup. The editor replaces the whole window content instead of opening in a dialog. This keeps the form large enough for chords and lyrics and avoids half-saved states: there are only Cancel and Save. The chord lookup is opened by the menu command `show-chords` and is ignored while the editor is open.
+
+## Chord diagrams
+
+Chord diagrams need no database and no main-process code. `src/shared/chords.ts` is a pure module that parses chord names, extracts the chords from a song's chords text and returns fingerings. The renderer draws them as SVG in `ChordDiagram.tsx`, and both the preview sheet and the lookup page use that component. The module has no dependency on Electron or React, so the tests run it directly in Node.
 
 ## Printing
 

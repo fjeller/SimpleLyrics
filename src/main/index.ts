@@ -7,6 +7,8 @@ import { buildMenu } from './menu'
 import { getLastFile, initSettings } from './settings'
 
 const APP_NAME = 'SimpleLyrics'
+const TITLE_NO_FILE = 'Simple Lyrics Manager'
+const TITLE_WITH_FILE = 'Simple Lyrics'
 
 let mainWindow: BrowserWindow | null = null
 let pendingOpenFile: string | undefined
@@ -17,7 +19,7 @@ function songFileFromArgs(args: string[]): string | undefined {
 
 function refreshWindowState(): void {
   const file = getCurrentFile()
-  mainWindow?.setTitle(file ? `${file.name} - ${APP_NAME}` : APP_NAME)
+  mainWindow?.setTitle(file ? `${TITLE_WITH_FILE} - ${file.name}` : TITLE_NO_FILE)
   mainWindow?.webContents.send('db:changed')
   buildMenu(() => mainWindow, file !== null)
 }
@@ -29,7 +31,7 @@ function createWindow(): void {
     minWidth: 800,
     minHeight: 500,
     show: false,
-    title: APP_NAME,
+    title: TITLE_NO_FILE,
     backgroundColor: '#1e1f22',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -40,6 +42,8 @@ function createWindow(): void {
   })
 
   mainWindow.once('ready-to-show', () => mainWindow?.show())
+  // Otherwise the HTML <title> overwrites the title set in refreshWindowState().
+  mainWindow.on('page-title-updated', (event) => event.preventDefault())
   mainWindow.on('closed', () => {
     mainWindow = null
   })

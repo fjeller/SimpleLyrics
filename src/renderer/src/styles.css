@@ -654,6 +654,94 @@ textarea {
   border-top: 1.5px solid var(--text);
 }
 
+.sheet-used-chords {
+  margin-bottom: 24px;
+  break-inside: avoid;
+}
+
+.sheet-used-chords h2 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.chord-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.chord-card {
+  width: 84px;
+  margin: 0;
+  text-align: center;
+  break-inside: avoid;
+}
+
+.chord-card figcaption {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.chord-card svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.chord-missing {
+  padding: 28px 0;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.chord-note {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Chord lookup page */
+.chord-lookup-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+}
+
+.chord-lookup-header > button {
+  justify-self: end;
+}
+
+.chord-lookup-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chord-lookup-select select {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font: inherit;
+}
+
+.chord-lookup-root {
+  margin-bottom: 28px;
+}
+
+.chord-lookup-root h2 {
+  margin: 0 0 8px;
+  padding-bottom: 4px;
+  font-size: 1.3em;
+  border-bottom: 1px solid var(--border);
+}
+
+.chord-lookup-group h3 {
+  margin: 12px 0 8px;
+  font-size: 0.95em;
+  color: var(--text-muted);
+}
+
 .sheet-chords,
 .sheet-text {
   margin: 0;
@@ -712,6 +800,11 @@ textarea {
   }
 
   .sheet-sub {
+    color: #000;
+  }
+
+  .sheet-used-chords h2,
+  .chord-missing {
     color: #000;
   }
 

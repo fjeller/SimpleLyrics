@@ -1,7 +1,9 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { RefObject } from 'react'
+import { extractChords } from '../../../shared/chords'
 import type { SongDetail } from '../../../shared/types'
 import { errorMessage, unwrap } from '../api'
+import { ChordDiagram } from './ChordDiagram'
 
 const MIN_FONT_REM = 1
 const MAX_FONT_REM = 1.5
@@ -49,6 +51,7 @@ interface SongPreviewProps {
 
 export function SongSheet({ song }: { song: SongDetail }): React.JSX.Element {
   const interpreters = song.interpreters.map((i) => i.name).join(', ')
+  const usedChords = useMemo(() => extractChords(song.chords ?? ''), [song.chords])
   const sheetRef = useRef<HTMLElement>(null)
   const fontSize = useFittedFontSize(sheetRef, [...(song.chords ?? '').split('\n'), ...(song.songText ?? '').split('\n')])
   return (
@@ -61,6 +64,16 @@ export function SongSheet({ song }: { song: SongDetail }): React.JSX.Element {
         </div>
       )}
       <hr className="sheet-rule" />
+      {usedChords.length > 0 && (
+        <section className="sheet-used-chords">
+          <h2>Chords used</h2>
+          <div className="chord-grid">
+            {usedChords.map((chord) => (
+              <ChordDiagram key={chord.key} chord={chord} />
+            ))}
+          </div>
+        </section>
+      )}
       {song.chords && <pre className="sheet-chords">{song.chords}</pre>}
       {song.songText && <pre className="sheet-text">{song.songText}</pre>}
     </article>
@@ -104,9 +117,6 @@ export function SongPreview({ songId, printOnLoad, onPrintRequested, onClose, on
   return (
     <div className="preview" ref={rootRef} tabIndex={-1} onKeyDown={(e) => e.key === 'Escape' && onClose()}>
       <header className="preview-header">
-        <button type="button" onClick={onClose}>
-          Close
-        </button>
         <h2>Preview</h2>
         <div className="editor-header-actions">
           <button type="button" onClick={onEdit} disabled={!song}>
@@ -114,6 +124,9 @@ export function SongPreview({ songId, printOnLoad, onPrintRequested, onClose, on
           </button>
           <button type="button" className="primary" onClick={onPrintRequested} disabled={!song}>
             Print...
+          </button>
+          <button type="button" onClick={onClose}>
+            Close
           </button>
         </div>
       </header>
