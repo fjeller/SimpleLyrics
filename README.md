@@ -14,6 +14,7 @@ The UI language is English.
 - Chord diagrams for the chords used in a song, shown above the chords text in the preview and print-out.
 - A chord lookup page with the standard fingerings of every chord, including barre chords.
 - A circle of fifths page with the chords of every key and an explanation of how to use it.
+- Guitar tabs written as text in the song text are drawn as real tablature in the preview and print-out.
 - Export and import of songs as JSON.
 - Dark (default) and light theme.
 
@@ -48,6 +49,7 @@ The documentation follows the [Diátaxis](https://diataxis.fr/) framework.
 
 - [Manage categories and interpreters](__documentation/how-to-manage-categories-and-interpreters.md)
 - [Use chord diagrams](__documentation/how-to-use-chord-diagrams.md)
+- [Add a guitar tab to a song](__documentation/how-to-add-guitar-tabs.md)
 - [Export and import songs](__documentation/how-to-export-import-songs.md)
 - [Build, test and package](__documentation/how-to-build-and-package.md)
 - [Change the database schema](__documentation/how-to-change-the-database-schema.md)
@@ -57,6 +59,7 @@ The documentation follows the [Diátaxis](https://diataxis.fr/) framework.
 - [User interface and keyboard shortcuts](__documentation/reference-ui-and-shortcuts.md)
 - [Data model and limits](__documentation/reference-data-model-and-limits.md)
 - [Chord notation and diagrams](__documentation/reference-chord-notation-and-diagrams.md)
+- [Tab notation](__documentation/reference-tab-notation.md)
 - [Export file format](__documentation/reference-export-format.md)
 - [Commands, stack and code map](__documentation/reference-commands-and-code-map.md)
 

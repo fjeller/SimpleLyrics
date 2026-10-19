@@ -37,6 +37,18 @@ The diagrams are drawn from the text of the song, so the song file does not stor
 
 **Diagrams use the text colour.** The SVG draws with `currentColor`, so one component serves the dark and the light theme and prints black on white without extra CSS.
 
+## Tabs are drawn on the character grid of the text
+
+A tab is stored as the text the user typed. The preview detects it and draws it, and the song file never contains drawing data, so the text stays editable, searchable and exportable like any other lyrics.
+
+**No musical interpretation.** The parser does not read timing, tuning or note lengths. Each character position is one column, and a number is drawn at the column where it was typed. Notes that line up in the text line up in the drawing, which is exactly what tab writers rely on. This also means one rule covers every tab style, including ones with unusual symbols.
+
+**Strict detection, silent fallback.** A tab needs 4 to 8 consecutive lines made only of tab characters, with a string name or a leading bar, and at least three dashes per line. Lyrics such as "A - b - c" or "Bridge --- chorus" contain other letters and are rejected. Anything that does not qualify stays ordinary text, so a mistake never hides content.
+
+**Rows break at bar lines.** A tab wider than 56 columns would be scaled down until the numbers were unreadable on A4. Instead the tab is split at bar lines into rows of at most 56 columns, which keeps the numbers at roughly the same size as the lyrics. All rows use the same scale. A row never splits across a page when printed.
+
+**Tabs are kept out of font fitting.** The lyrics font is fitted so that the longest line fits the page. Tab lines are very long and would make the lyrics small, so only text lines are measured.
+
 ## Print sheet and font fitting
 
 The sheet uses monospace fonts, because chords are aligned above lyrics with spaces. To avoid line wrapping, which would break the alignment, the font size is calculated from the longest line so that it fits the page width, clamped between 1 rem and 1.5 rem (`MAX_FONT_REM` in `SongPreview.tsx`). The calculation assumes A4 paper with 18 mm margins (`PRINT_CONTENT_WIDTH_PX = 657`). On Letter paper the margins differ and the result has not been verified.

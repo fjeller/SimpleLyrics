@@ -100,7 +100,7 @@ Buttons: **Cancel** and **Save**.
 - A rule.
 - **Chords used**: one chord diagram for each distinct chord found in the chords text. Hidden if no chord is found. See [Chord notation and diagrams](reference-chord-notation-and-diagrams.md).
 - Chords text (bold, monospace), exactly as entered.
-- Song text (monospace).
+- Song text (monospace). Guitar tabs in the song text are drawn as tablature, see [Tab notation](reference-tab-notation.md).
 
 ![Preview sheet](images/song-preview.png)
 

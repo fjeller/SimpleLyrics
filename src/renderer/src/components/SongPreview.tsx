@@ -2,8 +2,10 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { RefObject } from 'react'
 import { extractChords } from '../../../shared/chords'
 import type { SongDetail } from '../../../shared/types'
+import { splitSongText } from '../../../shared/tabs'
 import { errorMessage, unwrap } from '../api'
 import { ChordDiagram } from './ChordDiagram'
+import { TabDiagram } from './TabDiagram'
 
 const MIN_FONT_REM = 1
 const MAX_FONT_REM = 1.5
@@ -52,8 +54,10 @@ interface SongPreviewProps {
 export function SongSheet({ song }: { song: SongDetail }): React.JSX.Element {
   const interpreters = song.interpreters.map((i) => i.name).join(', ')
   const usedChords = useMemo(() => extractChords(song.chords ?? ''), [song.chords])
+  const segments = useMemo(() => splitSongText(song.songText ?? ''), [song.songText])
   const sheetRef = useRef<HTMLElement>(null)
-  const fontSize = useFittedFontSize(sheetRef, [...(song.chords ?? '').split('\n'), ...(song.songText ?? '').split('\n')])
+  const textLines = segments.flatMap((segment) => (segment.kind === 'text' ? segment.text.split('\n') : []))
+  const fontSize = useFittedFontSize(sheetRef, [...(song.chords ?? '').split('\n'), ...textLines])
   return (
     <article className="sheet" ref={sheetRef} style={fontSize ? ({ '--sheet-font': `${fontSize}px` } as React.CSSProperties) : undefined}>
       <h1 className="sheet-title">{song.title}</h1>
@@ -75,7 +79,15 @@ export function SongSheet({ song }: { song: SongDetail }): React.JSX.Element {
         </section>
       )}
       {song.chords && <pre className="sheet-chords">{song.chords}</pre>}
-      {song.songText && <pre className="sheet-text">{song.songText}</pre>}
+      {segments.map((segment, index) =>
+        segment.kind === 'tab' ? (
+          <TabDiagram key={index} tab={segment.tab} />
+        ) : (
+          <pre key={index} className="sheet-text">
+            {segment.text}
+          </pre>
+        )
+      )}
     </article>
   )
 }

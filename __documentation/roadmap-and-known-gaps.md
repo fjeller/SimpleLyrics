@@ -22,6 +22,8 @@ The automated tests cover the data layer, not these areas:
 - Chord diagrams cover only standard chords (see [Chord notation and diagrams](reference-chord-notation-and-diagrams.md)). Extended chords such as `9`, `m7b5` or `m6`, and most slash chords, show "No diagram".
 - The chord lookup lists the open shape and the E and A barre shapes only. There are no C, D or G shapes and no alternative voicings.
 - The chord lookup and circle of fifths pages have no keyboard shortcut.
+- Tabs are only drawn in the preview and print-out. The song editor shows them as plain text, and there is no tab editor.
+- Tab techniques other than slides are shown as small letters. Bends, vibrato, hammer-ons and pull-offs are not drawn as arcs or arrows, and repeat signs are not drawn.
 
 ## Ideas
 
@@ -38,6 +40,7 @@ The automated tests cover the data layer, not these areas:
 | Capo in the diagrams | Show the capo on the diagrams, or the sounding chord names. |
 | Circle of fifths for a song | Detect the key of a song from its chords and highlight the song's chords on the circle. |
 | Circle and chord diagrams | Click a chord on the circle of fifths to open its diagram. |
+| Richer tabs | Draw hammer-ons and pull-offs as arcs, bends as arrows, and repeat signs; show a live tab preview in the editor. |
 
 ## Related
 
