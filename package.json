@@ -1,6 +1,6 @@
 {
   "name": "simplelyrics",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Song and lyrics library for guitar players",
   "main": "./out/main/index.js",
   "author": "Frank Eller <fe@frankeller.de>",

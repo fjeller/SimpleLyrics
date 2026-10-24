@@ -1,5 +1,6 @@
 appId: com.simplelyrics.app
 productName: SimpleLyrics
+copyright: Copyright © 2025 Frank Eller
 directories:
   buildResources: build
 files:

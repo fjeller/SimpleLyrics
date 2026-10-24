@@ -549,6 +549,7 @@ textarea {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px 16px;
   max-width: 1000px;
+  margin: 0 auto;
   min-height: 100%;
   grid-template-rows: repeat(5, auto) 1fr;
 }
@@ -655,14 +656,25 @@ textarea {
 }
 
 .sheet-used-chords {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   break-inside: avoid;
 }
 
-.sheet-used-chords h2 {
-  margin: 0 0 8px;
-  font-size: 14px;
-  color: var(--text-muted);
+/* The rule above leaves 24px; the diagrams sit closer to it. */
+.sheet-rule + .sheet-used-chords {
+  margin-top: -12px;
+}
+
+.sheet-used-chords .chord-grid {
+  gap: 6px 10px;
+}
+
+.sheet-used-chords .chord-card {
+  width: 62px;
+}
+
+.sheet-used-chords .chord-card figcaption {
+  font-size: 13px;
 }
 
 .chord-grid {
@@ -962,7 +974,6 @@ textarea {
     fill: #fff;
   }
 
-  .sheet-used-chords h2,
   .chord-missing {
     color: #000;
   }

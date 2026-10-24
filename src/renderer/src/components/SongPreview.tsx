@@ -70,7 +70,6 @@ export function SongSheet({ song }: { song: SongDetail }): React.JSX.Element {
       <hr className="sheet-rule" />
       {usedChords.length > 0 && (
         <section className="sheet-used-chords">
-          <h2>Chords used</h2>
           <div className="chord-grid">
             {usedChords.map((chord) => (
               <ChordDiagram key={chord.key} chord={chord} />

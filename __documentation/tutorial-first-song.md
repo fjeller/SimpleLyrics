@@ -55,8 +55,8 @@ The list filters on every keystroke. The search covers the whole file and ignore
 ## 4. Preview, chord diagrams and print
 
 1. Select the song in the list.
-2. Choose **Preview song** (toolbar, or `Ctrl+Shift+P`). The sheet shows the title, the interpreters, the capo (only if it is greater than 0), a **Chords used** section, the chords text and the lyrics.
-3. Look at the **Chords used** section. It shows a diagram for each chord of your chords text, here G, C, G7, Em and D. Each chord appears only once, however often you use it.
+2. Choose **Preview song** (toolbar, or `Ctrl+Shift+P`). The sheet shows the title, the interpreters, the capo (only if it is greater than 0), a row of chord diagrams, the chords text and the lyrics.
+3. Look at the chord diagrams above the chords text. There is one for each chord of your chords text, here G, C, G7, Em and D. Each chord appears only once, however often you use it.
 4. Choose **Print song** (toolbar, or `Ctrl+P`) to open the system print dialog.
 
 ![The preview sheet with chord diagrams](images/song-preview.png)

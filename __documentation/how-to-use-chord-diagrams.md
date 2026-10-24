@@ -23,9 +23,9 @@ For the exact notation rules, see [Reference: Chord notation and diagrams](refer
 
 3. Choose **Save**, then **Preview song**.
 
-The **Chords used** section above the chords text now shows one diagram for each distinct chord. A chord used in the intro, the verse and the chorus is shown once. The chords text itself is printed exactly as you wrote it.
+The chord diagrams now appear above the chords text, one for each distinct chord. A chord used in the intro, the verse and the chorus is shown once. The chords text itself is printed exactly as you wrote it.
 
-![The preview sheet with the Chords used section](images/song-preview.png)
+![The preview sheet with chord diagrams](images/song-preview.png)
 
 ## Fix a chord that does not appear
 
