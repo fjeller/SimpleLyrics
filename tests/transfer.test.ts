@@ -8,6 +8,7 @@ import { listCategories } from '../src/main/repositories/categories'
 import { listInterpreters } from '../src/main/repositories/interpreters'
 import { createSong, getSong, listSongs } from '../src/main/repositories/songs'
 import { exportSongs, importSongs } from '../src/main/repositories/transfer'
+import { createSetlist, getSetlist, listSetlists, saveSetlist } from '../src/main/repositories/setlists'
 import type { SongInput } from '../src/shared/types'
 
 const migrations = resolve(__dirname, '../drizzle')
@@ -66,7 +67,15 @@ describe('export and import', () => {
     const text = JSON.stringify(exportSongs(source.db))
     const result = importSongs(target.db, parseSongExport(text))
 
-    expect(result).toEqual({ imported: 2, skipped: 0, categoriesAdded: 1, interpretersAdded: 2 })
+    expect(result).toEqual({
+      imported: 2,
+      skipped: 0,
+      categoriesAdded: 1,
+      interpretersAdded: 2,
+      setlistsImported: 0,
+      setlistsRenamed: 0,
+      missingSetlistSongs: []
+    })
     const [first] = listSongs(target.db, { kind: 'all' })
     const detail = getSong(target.db, first.id)!
     expect(detail).toMatchObject({ title: 'Plain', capo: 0, key: null, interpreters: [] })
@@ -116,6 +125,91 @@ describe('export and import', () => {
 
     expect(importSongs(target.db, parsed)).toMatchObject({ imported: 2, skipped: 0 })
     expect(listSongs(target.db, { kind: 'all' }).map((s) => s.title)).toEqual(['Also good', 'Good'])
+  })
+})
+
+describe('setlists in export and import', () => {
+  const titles = (db: DbHandle['db'], name: string): string[] => {
+    const summary = listSetlists(db).find((s) => s.name === name)!
+    return getSetlist(db, summary.id)!.items.map((i) => (i.kind === 'song' ? `${i.title}/${i.interpreters}` : '|'))
+  }
+
+  it('round-trips setlists with order, breaks and repeated songs', () => {
+    const rover = createSong(source.db, song({ title: 'Wild Rover', newInterpreterNames: ['Traditional'] }))
+    const molly = createSong(source.db, song({ title: 'Molly Malone' }))
+    const gig = createSetlist(source.db, 'Pub gig')
+    saveSetlist(source.db, gig, 'Pub gig', [
+      { kind: 'song', songId: molly },
+      { kind: 'break' },
+      { kind: 'song', songId: rover },
+      { kind: 'song', songId: molly }
+    ])
+
+    const exported = exportSongs(source.db)
+    expect(exported.setlists).toEqual([
+      {
+        name: 'Pub gig',
+        items: [
+          { kind: 'song', title: 'Molly Malone', interpreters: [] },
+          { kind: 'break' },
+          { kind: 'song', title: 'Wild Rover', interpreters: ['Traditional'] },
+          { kind: 'song', title: 'Molly Malone', interpreters: [] }
+        ]
+      }
+    ])
+
+    const result = importSongs(target.db, parseSongExport(JSON.stringify(exported)))
+    expect(result).toMatchObject({ imported: 2, setlistsImported: 1, setlistsRenamed: 0, missingSetlistSongs: [] })
+    expect(titles(target.db, 'Pub gig')).toEqual(['Molly Malone/', '|', 'Wild Rover/Traditional', 'Molly Malone/'])
+  })
+
+  it('links setlist entries to songs that already existed in the target', () => {
+    createSong(target.db, song({ title: 'wild rover', newInterpreterNames: ['traditional'] }))
+    const rover = createSong(source.db, song({ title: 'Wild Rover', newInterpreterNames: ['Traditional'] }))
+    const gig = createSetlist(source.db, 'Gig')
+    saveSetlist(source.db, gig, 'Gig', [{ kind: 'song', songId: rover }])
+
+    const result = importSongs(target.db, parseSongExport(JSON.stringify(exportSongs(source.db))))
+    expect(result).toMatchObject({ imported: 0, skipped: 1, setlistsImported: 1 })
+    expect(titles(target.db, 'Gig')).toEqual(['wild rover/traditional'])
+  })
+
+  it('numbers the name when a setlist with that name exists and imports it anyway', () => {
+    createSetlist(target.db, 'Gig')
+    createSetlist(target.db, 'Gig (2)')
+    const data = { format: 'simplelyrics-songs', version: 1, songs: [], setlists: [{ name: 'gig', items: [] }, { name: 'Gig', items: [] }] }
+
+    const result = importSongs(target.db, parseSongExport(JSON.stringify(data)))
+    expect(result).toMatchObject({ setlistsImported: 2, setlistsRenamed: 2 })
+    expect(listSetlists(target.db).map((s) => s.name)).toEqual(['Gig', 'Gig (2)', 'gig (3)', 'Gig (4)'])
+  })
+
+  it('leaves out and reports songs that are not in the file', () => {
+    const data = {
+      format: 'simplelyrics-songs',
+      version: 1,
+      songs: [{ title: 'Known' }],
+      setlists: [
+        {
+          name: 'Gig',
+          items: [{ kind: 'song', title: 'Known' }, { kind: 'break' }, { kind: 'song', title: 'Ghost', interpreters: ['Nobody'] }]
+        }
+      ]
+    }
+    const result = importSongs(target.db, parseSongExport(JSON.stringify(data)))
+    expect(result.missingSetlistSongs).toEqual([{ setlist: 'Gig', count: 1 }])
+    expect(titles(target.db, 'Gig')).toEqual(['Known/'])
+  })
+
+  it('accepts exports without setlists and reports invalid setlists', () => {
+    expect(parseSongExport('{"format":"simplelyrics-songs","version":1,"songs":[]}').setlists).toEqual([])
+    const parsed = parseSongExport(
+      '{"format":"simplelyrics-songs","version":1,"songs":[],"setlists":[{"name":" ","items":[]},{"name":"Ok","items":[{"kind":"song","title":"A"}]},{"name":"Bad"}]}'
+    )
+    expect(parsed.setlists.map((s) => s.name)).toEqual(['Ok'])
+    expect(parsed.invalid).toHaveLength(2)
+    expect(parsed.invalid[0]).toMatch(/^Setlist 1: /)
+    expect(parsed.invalid[1]).toMatch(/^Setlist 3 \(Bad\): /)
   })
 })
 

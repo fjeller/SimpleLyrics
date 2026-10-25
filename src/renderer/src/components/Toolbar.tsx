@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { Theme } from '../../../shared/types'
-import { ChordLookupIcon, CircleOfFifthsIcon, DeleteSongIcon, EditSongIcon, ExportSongsIcon, ImportSongsIcon, MoonIcon, NewFileIcon, NewSongIcon, OpenFileIcon, PreviewSongIcon, PrintSongIcon, SaveFileAsIcon, SunIcon } from './Icons'
+import { ChordLookupIcon, CircleOfFifthsIcon, DeleteSongIcon, EditSongIcon, ExportSongsIcon, ImportSongsIcon, MoonIcon, NewFileIcon, NewSongIcon, OpenFileIcon, PreviewSongIcon, PrintSongIcon, SaveFileAsIcon, SetlistsIcon, SunIcon } from './Icons'
 
 interface ToolbarProps {
   theme: Theme
@@ -19,6 +19,7 @@ interface ToolbarProps {
   onDeleteSong: () => void
   onPreviewSong: () => void
   onPrintSong: () => void
+  onSetlists: () => void
   onChordLookup: () => void
   onCircleOfFifths: () => void
   onThemeChange: (theme: Theme) => void
@@ -75,6 +76,12 @@ export function Toolbar(props: ToolbarProps): React.JSX.Element {
       </IconButton>
       <IconButton label="Print song" disabled={locked || !canEdit} onClick={props.onPrintSong}>
         <PrintSongIcon />
+      </IconButton>
+
+      <span className="toolbar-separator" role="separator" aria-orientation="vertical" />
+
+      <IconButton label="Setlists" disabled={locked || !hasFile} onClick={props.onSetlists}>
+        <SetlistsIcon />
       </IconButton>
 
       <span className="toolbar-separator" role="separator" aria-orientation="vertical" />

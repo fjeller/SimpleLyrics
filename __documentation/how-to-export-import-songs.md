@@ -8,7 +8,7 @@ Use the JSON export to share songs, back them up in a readable format, or move t
 2. Choose **Export songs** (toolbar, right side) or **File > Export Songs as JSON...**.
 3. Pick a target. The suggested name is the songbook name with the extension `.json`.
 
-All songs of the open file are exported, together with all categories and interpreters (including empty ones). A message box shows the number of exported songs.
+All songs of the open file are exported, together with all categories and interpreters (including empty ones) and all setlists. A message box shows the number of exported songs and setlists.
 
 ## Import songs
 
@@ -21,7 +21,9 @@ A message box shows the result:
 - **Imported**: songs that were added.
 - **Skipped (already present)**: songs that already exist.
 - **New categories** / **New interpreters**: entries that were created (only shown if greater than 0).
-- **Invalid (not imported)**: songs that failed validation, with the reason. The first 10 are listed.
+- **Setlists imported** / **Setlists renamed**: setlists that were added, and how many of them got a numbered name such as "Pub gig (2)" because the name was already taken.
+- **Setlist "…": N songs not found**: setlist entries whose song is not in the file. They are left out.
+- **Invalid (not imported)**: songs and setlists that failed validation, with the reason. The first 10 are listed.
 
 ## How duplicates are detected
 

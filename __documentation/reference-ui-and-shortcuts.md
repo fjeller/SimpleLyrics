@@ -10,6 +10,9 @@
 | Preview | Print-style sheet of the selected song. |
 | Chord lookup | Page with chord diagrams. Opened from **View > Chord Lookup**; works with or without an open file. |
 | Circle of fifths | Page with an interactive circle of fifths and an explanation. Opened from **View > Circle of Fifths**; works with or without an open file. |
+| Setlists | List of the setlists of the open file, with an overview of the selected one. Opened with **Songs > Setlists...**, `Ctrl+L` or the toolbar. See [How to build and print a setlist](how-to-use-setlists.md). |
+| Setlist editor | Two panes: the songs of the file on the left, the setlist with its sets on the right. |
+| Setlist print | The setlist on one A4 page, optionally followed by all its songs. |
 
 ## Toolbar
 
@@ -18,6 +21,7 @@
 | Left | New file, Open file, Save file as | Save as copies the open file (SQLite `backup`). |
 | Left | New song, Edit song, Delete song | Edit and Delete need a selected song. |
 | Left | Preview song, Print song | Need a selected song. |
+| Left | Setlists | Opens the [setlists](how-to-use-setlists.md). Needs an open file. |
 | Left | Chord lookup | Opens the [chord lookup page](#chord-lookup-page). Works without an open file. |
 | Left | Circle of fifths | Opens the [circle of fifths page](#circle-of-fifths-page). Works without an open file. |
 | Right | Export songs, Import songs | JSON, see [Export file format](reference-export-format.md). |
@@ -31,7 +35,7 @@ While the editor is open, all buttons are disabled, except Delete (for an existi
 |---|---|
 | File | New File..., Open File..., Open Recent, Save File As..., Export Songs as JSON..., Import Songs from JSON..., Quit (Close on macOS) |
 | Edit | Standard edit commands |
-| Songs | New Song, Preview Song, Print Song..., Search |
+| Songs | New Song, Preview Song, Print Song..., Search, Setlists... |
 | View | Dark Theme, Light Theme, Chord Lookup, Circle of Fifths, Toggle Full Screen. In development builds also Reload and Toggle Developer Tools. |
 
 Items that work on songs and the file commands Save As, Export and Import are disabled while no file is open. Chord Lookup and Circle of Fifths are always enabled, but are ignored while a song is being edited, so unsaved changes are not lost.
@@ -49,6 +53,10 @@ Items that work on songs and the file commands Save As, Export and Import are di
 | `Ctrl+Shift+P` | Preview song |
 | `Ctrl+P` | Print song |
 | `Ctrl+F` | Focus the search field |
+| `Ctrl+L` | Open the setlists |
+| `Enter` (setlist editor, songs list) | Add the selected song to the setlist |
+| `Alt+↑` / `Alt+↓` (setlist editor) | Move the selected setlist entry |
+| `Delete` (setlist editor) | Remove the selected entry from the setlist |
 | `Enter` (song list) | Edit the selected song |
 | `Delete` (song list) | Delete the selected song, after confirmation |
 | `Esc` (editor) | Cancel, with a prompt if there are unsaved changes |

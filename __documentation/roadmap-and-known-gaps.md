@@ -11,7 +11,8 @@ The automated tests cover the data layer, not these areas:
 - Export and import dialogs.
 - Real print output, also on Letter paper, where the margins differ from A4.
 - Light theme in all views.
-- Keyboard shortcuts: `Ctrl+N`, `Ctrl+F`, `Ctrl+P`, `Ctrl+Shift+P`.
+- Keyboard shortcuts: `Ctrl+N`, `Ctrl+F`, `Ctrl+P`, `Ctrl+Shift+P`, `Ctrl+L`.
+- Setlists: dragging with the mouse in the setlist editor, and the printed setlist on paper (one-page fitting, page breaks before the songs).
 
 ## Known gaps
 
@@ -32,7 +33,7 @@ The automated tests cover the data layer, not these areas:
 | Import conflict modes | Alternatives to "skip": update the existing song, keep both when the content differs, or ask per song. |
 | More sort options | Sort by capo or first line, sort by several columns, or remember the sort across restarts. |
 | Chord transposition | Transpose chords and the key by a number of semitones. Needs a parser for chord notation. |
-| Print several songs | Print the selection or a whole category in one job. |
+| Print several songs | Print the selection or a whole category in one job. Setlists already print all their songs. |
 | Key on the print sheet | Show the key (and original key) on the sheet next to the capo. |
 | More chord types | Add ninths, minor sixths, `m7b5` and more slash chords to the chord tables. |
 | More voicings | Add the C, D and G shapes and alternative fingerings of the same chord. |

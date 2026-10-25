@@ -24,7 +24,7 @@ function filterCondition(filter: SongFilter): SQL | undefined {
   }
 }
 
-const interpreterNames = sql<string | null>`(
+export const interpreterNames = sql<string | null>`(
   select group_concat(name, ', ') from (
     select ${interpreters.name} as name
     from ${songInterpreters}

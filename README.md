@@ -10,6 +10,7 @@ The UI language is English.
 - Songs with title, key, original key, first line, capo (0–12), chords, lyrics, one category and any number of interpreters.
 - Sidebar to browse by category or interpreter, with song counts.
 - Sort the song list by title, interpreters or category.
+- Setlists for gigs: songs in order, split into sets by breaks, printed on one sheet or together with all songs.
 - Search by title and first line, from 3 characters, with Unicode-aware matching.
 - Preview and print of a single song (black on white, A4 layout, auto-fitted font size).
 - Chord diagrams for the chords used in a song, shown above the chords text in the preview and print-out.
@@ -51,6 +52,7 @@ The documentation follows the [Diátaxis](https://diataxis.fr/) framework.
 - [Manage categories and interpreters](__documentation/how-to-manage-categories-and-interpreters.md)
 - [Use chord diagrams](__documentation/how-to-use-chord-diagrams.md)
 - [Add a guitar tab to a song](__documentation/how-to-add-guitar-tabs.md)
+- [Build and print a setlist](__documentation/how-to-use-setlists.md)
 - [Export and import songs](__documentation/how-to-export-import-songs.md)
 - [Build, test and package](__documentation/how-to-build-and-package.md)
 - [Change the database schema](__documentation/how-to-change-the-database-schema.md)

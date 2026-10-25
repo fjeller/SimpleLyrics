@@ -108,7 +108,40 @@ export interface CurrentFile {
   name: string
 }
 
-export type MenuCommand = 'new-song' | 'focus-search' | 'theme-dark' | 'theme-light' | 'preview-song' | 'print-song' | 'show-chords' | 'show-circle-of-fifths'
+export type MenuCommand =
+  | 'new-song'
+  | 'focus-search'
+  | 'theme-dark'
+  | 'theme-light'
+  | 'preview-song'
+  | 'print-song'
+  | 'show-chords'
+  | 'show-circle-of-fifths'
+  | 'show-setlists'
+
+export type SetlistItemInput = { kind: 'song'; songId: number } | { kind: 'break' }
+
+export interface SetlistSummary {
+  id: number
+  name: string
+  songCount: number
+  setCount: number
+}
+
+export type SetlistItem = { kind: 'song'; songId: number; title: string; interpreters: string } | { kind: 'break' }
+
+export interface SetlistDetail {
+  id: number
+  name: string
+  items: SetlistItem[]
+}
+
+export interface SetlistPrintData {
+  id: number
+  name: string
+  /** The songs of each set, in order; empty sets are left out. */
+  sets: SongDetail[][]
+}
 
 export const EXPORT_FORMAT = 'simplelyrics-songs'
 export const EXPORT_VERSION = 1
@@ -126,6 +159,14 @@ export interface ExportedSong {
   interpreters: string[]
 }
 
+/** Setlist songs are referenced by title and interpreters, the same rule the import uses for duplicates. */
+export type ExportedSetlistItem = { kind: 'song'; title: string; interpreters: string[] } | { kind: 'break' }
+
+export interface ExportedSetlist {
+  name: string
+  items: ExportedSetlistItem[]
+}
+
 export interface SongExport {
   format: typeof EXPORT_FORMAT
   version: typeof EXPORT_VERSION
@@ -133,6 +174,8 @@ export interface SongExport {
   categories: string[]
   interpreters: string[]
   songs: ExportedSong[]
+  /** Optional; exports from older versions have none. */
+  setlists?: ExportedSetlist[]
 }
 
 export interface ImportResult {
@@ -141,6 +184,11 @@ export interface ImportResult {
   skipped: number
   categoriesAdded: number
   interpretersAdded: number
+  setlistsImported: number
+  /** Setlists imported under a numbered name because the name was taken. */
+  setlistsRenamed: number
+  /** Setlist entries whose song is not in the file, per setlist name. */
+  missingSetlistSongs: { setlist: string; count: number }[]
 }
 
 export type ApiResult<T> = { ok: true; data: T } | { ok: false; error: string }
@@ -172,6 +220,19 @@ export interface SimpleLyricsApi {
     create(name: string): Promise<ApiResult<number>>
     rename(id: number, name: string): Promise<ApiResult<void>>
     delete(id: number): Promise<ApiResult<void>>
+  }
+  setlists: {
+    list(): Promise<ApiResult<SetlistSummary[]>>
+    get(id: number): Promise<ApiResult<SetlistDetail | null>>
+    getForPrint(id: number): Promise<ApiResult<SetlistPrintData | null>>
+    create(name: string): Promise<ApiResult<number>>
+    rename(id: number, name: string): Promise<ApiResult<void>>
+    duplicate(id: number, name: string): Promise<ApiResult<number>>
+    delete(id: number): Promise<ApiResult<void>>
+    /** Saves name and items in one transaction; breaks that would create empty sets are dropped. */
+    save(id: number, name: string, items: SetlistItemInput[]): Promise<ApiResult<void>>
+    /** Number of setlists that contain the song. */
+    usage(songId: number): Promise<ApiResult<number>>
   }
   transfer: {
     exportSongs(): Promise<ApiResult<void>>

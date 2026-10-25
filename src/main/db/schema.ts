@@ -63,3 +63,33 @@ export const songInterpreters = sqliteTable(
   },
   (t) => [primaryKey({ columns: [t.songId, t.interpreterId] }), index('song_interpreters_interpreter_idx').on(t.interpreterId)]
 )
+
+export const setlists = sqliteTable(
+  'setlists',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    name: text('name').notNull(),
+    createdAt: text('created_at').notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text('updated_at').notNull().default(sql`CURRENT_TIMESTAMP`)
+  },
+  (t) => [uniqueIndex('setlists_name_nocase').on(sql`${t.name} COLLATE NOCASE`)]
+)
+
+/** Songs and breaks of a setlist in order; sets are derived from the breaks. */
+export const setlistItems = sqliteTable(
+  'setlist_items',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    setlistId: integer('setlist_id')
+      .notNull()
+      .references(() => setlists.id, { onDelete: 'cascade' }),
+    position: integer('position').notNull(),
+    kind: text('kind', { enum: ['song', 'break'] }).notNull(),
+    songId: integer('song_id').references(() => songs.id, { onDelete: 'cascade' })
+  },
+  (t) => [
+    uniqueIndex('setlist_items_position_idx').on(t.setlistId, t.position),
+    index('setlist_items_song_idx').on(t.songId),
+    check('setlist_items_kind', sql`(${t.kind} = 'song' and ${t.songId} is not null) or (${t.kind} = 'break' and ${t.songId} is null)`)
+  ]
+)

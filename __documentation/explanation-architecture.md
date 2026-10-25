@@ -35,7 +35,13 @@ The main process also pushes events to the renderer: `menu:command` for menu act
 
 ## Renderer state
 
-`App.tsx` holds the state and switches between five views: list, edit, preview, chord lookup and circle of fifths. The editor replaces the whole window content instead of opening in a dialog. This keeps the form large enough for chords and lyrics and avoids half-saved states: there are only Cancel and Save. The chord lookup and the circle of fifths are opened by the menu commands `show-chords` and `show-circle-of-fifths` or by toolbar buttons, and are ignored while the editor is open.
+`App.tsx` holds the state and switches between its views: list, song editor, preview, chord lookup, circle of fifths, setlists, setlist editor and setlist print. The editors replace the whole window content instead of opening in a dialog. This keeps the forms large enough and avoids half-saved states: there are only Cancel and Save. The extra pages are opened by menu commands (`show-chords`, `show-circle-of-fifths`, `show-setlists`) or toolbar buttons, and are ignored while an editor is open.
+
+## Setlists
+
+A setlist is stored as one ordered list of items, each either a song or a break, in `setlist_items`. Sets are not stored: `splitIntoSets` in `src/shared/setlists.ts` derives them from the breaks wherever they are shown or printed. Moving a song or a break is therefore a plain list operation, and the stored order can never contradict the sets. The editor works on an in-memory copy, and saving replaces all items of the setlist in one transaction.
+
+The print view renders the setlist page with a fixed content width (A4 minus the margins), measures it, and picks the largest font and column count that fit on one page before the print dialog opens. The song pages reuse the `SongSheet` component of the preview.
 
 ## Chord diagrams
 
