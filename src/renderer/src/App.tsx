@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { MIN_SEARCH_LENGTH } from '../../shared/types'
-import type { CategoryList, CurrentFile, InterpreterList, MenuCommand, SongFilter, SongListItem, Theme } from '../../shared/types'
+import { DEFAULT_SONG_SORT, MIN_SEARCH_LENGTH } from '../../shared/types'
+import type { CategoryList, CurrentFile, InterpreterList, MenuCommand, SongFilter, SongListItem, SongSort, SongSortColumn, Theme } from '../../shared/types'
 import { errorMessage, unwrap } from './api'
 import { ConfirmDialog } from './components/Dialogs'
 import { ChordLookup } from './components/ChordLookup'
@@ -37,6 +37,7 @@ export default function App(): React.JSX.Element | null {
   const [selection, setSelection] = useState<Selection>({ kind: 'all' })
   const [search, setSearch] = useState('')
   const [songs, setSongs] = useState<SongListItem[]>([])
+  const [sort, setSort] = useState<SongSort>(DEFAULT_SONG_SORT)
   const [categories, setCategories] = useState<CategoryList | null>(null)
   const [interpreters, setInterpreters] = useState<InterpreterList | null>(null)
   const [selectedSongId, setSelectedSongId] = useState<number | null>(null)
@@ -86,6 +87,7 @@ export default function App(): React.JSX.Element | null {
       setView({ mode: 'list' })
       setSelection({ kind: 'all' })
       setSearch('')
+      setSort(DEFAULT_SONG_SORT)
       setSelectedSongId(null)
       setDialog(null)
       setError(null)
@@ -125,7 +127,7 @@ export default function App(): React.JSX.Element | null {
   useEffect(() => {
     if (filePath === null) return
     let cancelled = false
-    unwrap(window.api.songs.list(JSON.parse(filterKey) as SongFilter))
+    unwrap(window.api.songs.list(JSON.parse(filterKey) as SongFilter, sort))
       .then((list) => {
         if (!cancelled) setSongs(list)
       })
@@ -135,7 +137,7 @@ export default function App(): React.JSX.Element | null {
     return () => {
       cancelled = true
     }
-  }, [filePath, filterKey, reloadToken, showError])
+  }, [filePath, filterKey, sort, reloadToken, showError])
 
   const selectedSong = songs.find((s) => s.id === selectedSongId)
   const activeSongId =
@@ -178,6 +180,10 @@ export default function App(): React.JSX.Element | null {
     } catch (e) {
       showError(e)
     }
+  }
+
+  function changeSort(column: SongSortColumn): void {
+    setSort((current) => ({ column, direction: current.column === column && current.direction === 'asc' ? 'desc' : 'asc' }))
   }
 
   function changeTab(next: SidebarTab): void {
@@ -338,6 +344,8 @@ export default function App(): React.JSX.Element | null {
           songs={songs}
           selectedId={selectedSongId}
           emptyText={emptyText}
+          sort={sort}
+          onSortChange={changeSort}
           onSelect={setSelectedSongId}
           onOpen={(id) => setView({ mode: 'edit', songId: id })}
           onDelete={(song) => setDialog({ kind: 'delete-song', song })}

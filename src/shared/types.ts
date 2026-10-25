@@ -49,6 +49,16 @@ export type SongFilter =
   | { kind: 'interpreter'; id: number | null }
   | { kind: 'search'; term: string }
 
+/** Empty interpreters / categories sort first ascending and last descending. */
+export type SongSortColumn = 'title' | 'interpreters' | 'category'
+
+export interface SongSort {
+  column: SongSortColumn
+  direction: 'asc' | 'desc'
+}
+
+export const DEFAULT_SONG_SORT: SongSort = { column: 'title', direction: 'asc' }
+
 export interface SongListItem {
   id: number
   title: string
@@ -145,7 +155,7 @@ export interface SimpleLyricsApi {
     saveAs(): Promise<ApiResult<CurrentFile | null>>
   }
   songs: {
-    list(filter: SongFilter): Promise<ApiResult<SongListItem[]>>
+    list(filter: SongFilter, sort?: SongSort): Promise<ApiResult<SongListItem[]>>
     get(id: number): Promise<ApiResult<SongDetail | null>>
     create(input: SongInput): Promise<ApiResult<number>>
     update(id: number, input: SongInput): Promise<ApiResult<void>>

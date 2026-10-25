@@ -4,7 +4,8 @@ import { categories, interpreters, songInterpreters, songs } from '../db/schema'
 import { UserError } from '../errors'
 import { getOrCreateCategory } from './categories'
 import { getOrCreateInterpreter } from './interpreters'
-import type { SongDetail, SongFilter, SongInput, SongListItem } from '../../shared/types'
+import type { SongDetail, SongFilter, SongInput, SongListItem, SongSort } from '../../shared/types'
+import { DEFAULT_SONG_SORT } from '../../shared/types'
 
 function filterCondition(filter: SongFilter): SQL | undefined {
   switch (filter.kind) {
@@ -23,7 +24,31 @@ function filterCondition(filter: SongFilter): SQL | undefined {
   }
 }
 
-export function listSongs(db: AppDb, filter: SongFilter): SongListItem[] {
+const interpreterNames = sql<string | null>`(
+  select group_concat(name, ', ') from (
+    select ${interpreters.name} as name
+    from ${songInterpreters}
+    join ${interpreters} on ${interpreters.id} = ${songInterpreters.interpreterId}
+    where ${songInterpreters.songId} = ${songs.id}
+    order by sort_key(${interpreters.name})
+  )
+)`
+
+/** The chosen column first, then title and id so the order is stable. NULLs (no category / interpreter) sort first ascending, last descending. */
+function orderClauses(sort: SongSort): SQL[] {
+  const direction = sql.raw(sort.direction === 'desc' ? 'desc' : 'asc')
+  const byTitle = sql`sort_key(${songs.title})`
+  switch (sort.column) {
+    case 'title':
+      return [sql`${byTitle} ${direction}`, sql`${songs.id} asc`]
+    case 'interpreters':
+      return [sql`sort_key(${interpreterNames}) ${direction}`, sql`${byTitle} asc`, sql`${songs.id} asc`]
+    case 'category':
+      return [sql`sort_key(${categories.name}) ${direction}`, sql`${byTitle} asc`, sql`${songs.id} asc`]
+  }
+}
+
+export function listSongs(db: AppDb, filter: SongFilter, sort: SongSort = DEFAULT_SONG_SORT): SongListItem[] {
   return db
     .select({
       id: songs.id,
@@ -31,20 +56,12 @@ export function listSongs(db: AppDb, filter: SongFilter): SongListItem[] {
       category: categories.name,
       capo: songs.capo,
       firstLine: songs.firstLine,
-      interpreters: sql<string | null>`(
-        select group_concat(name, ', ') from (
-          select ${interpreters.name} as name
-          from ${songInterpreters}
-          join ${interpreters} on ${interpreters.id} = ${songInterpreters.interpreterId}
-          where ${songInterpreters.songId} = ${songs.id}
-          order by sort_key(${interpreters.name})
-        )
-      )`
+      interpreters: interpreterNames
     })
     .from(songs)
     .leftJoin(categories, eq(songs.categoryId, categories.id))
     .where(filterCondition(filter))
-    .orderBy(sql`sort_key(${songs.title})`, songs.id)
+    .orderBy(...orderClauses(sort))
     .all()
     .map((row) => ({ ...row, interpreters: row.interpreters ?? '' }))
 }

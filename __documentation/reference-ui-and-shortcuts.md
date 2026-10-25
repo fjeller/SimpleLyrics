@@ -68,6 +68,22 @@ Rows have two lines: title, interpreters, category and capo; below that, the fir
 
 ![Song list with sidebar](images/song-list.png)
 
+### Sorting
+
+Click the **Title**, **Interpreter(s)** or **Category** header to sort the list by that column. The active column shows an arrow (▲ ascending, ▼ descending).
+
+| Click | Result |
+|---|---|
+| Another header | Sorts by that column, ascending. |
+| The active header | Reverses the direction. |
+
+- The default is the title, ascending.
+- Songs without a category or interpreter come first when sorting ascending and last when sorting descending.
+- Songs with the same value are ordered by title, ascending, in both directions.
+- The sort applies to the sidebar selection and to search results.
+- The sort is not saved. It returns to the default when you open another file or restart the app.
+- Sorting uses the same Unicode-aware ordering as the default list. The headers are buttons, so they can be focused with `Tab` and activated with `Enter` or `Space`.
+
 ## Search
 
 - Starts at 3 characters (`MIN_SEARCH_LENGTH`). Shorter input falls back to the sidebar selection.

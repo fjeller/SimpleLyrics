@@ -148,6 +148,37 @@ describe('filters and search', () => {
     expect(apple).toMatchObject({ interpreters: 'Band, Solo', category: 'Pop' })
   })
 
+  it('sorts by title in both directions', () => {
+    const titles = (direction: 'asc' | 'desc'): string[] => listSongs(handle.db, { kind: 'all' }, { column: 'title', direction }).map((s) => s.title)
+    expect(titles('asc')).toEqual(['Äpfel', 'apple', 'Zebra'])
+    expect(titles('desc')).toEqual(['Zebra', 'apple', 'Äpfel'])
+  })
+
+  it('sorts by interpreters with empty values first ascending and last descending', () => {
+    const titles = (direction: 'asc' | 'desc'): string[] => listSongs(handle.db, { kind: 'all' }, { column: 'interpreters', direction }).map((s) => s.title)
+    expect(titles('asc')).toEqual(['Äpfel', 'Zebra', 'apple'])
+    expect(titles('desc')).toEqual(['apple', 'Zebra', 'Äpfel'])
+  })
+
+  it('sorts by category with empty values first ascending and last descending', () => {
+    const titles = (direction: 'asc' | 'desc'): string[] => listSongs(handle.db, { kind: 'all' }, { column: 'category', direction }).map((s) => s.title)
+    expect(titles('asc')).toEqual(['Äpfel', 'apple', 'Zebra'])
+    expect(titles('desc')).toEqual(['Zebra', 'apple', 'Äpfel'])
+  })
+
+  it('breaks ties by title ascending in either direction', () => {
+    createSong(handle.db, song({ title: 'Bravo' }))
+    const titles = (direction: 'asc' | 'desc'): string[] => listSongs(handle.db, { kind: 'all' }, { column: 'category', direction }).map((s) => s.title)
+    expect(titles('asc')).toEqual(['Äpfel', 'Bravo', 'apple', 'Zebra'])
+    expect(titles('desc')).toEqual(['Zebra', 'apple', 'Äpfel', 'Bravo'])
+  })
+
+  it('applies the sort to filtered lists too', () => {
+    const band = listInterpreters(handle.db).items.find((i) => i.name === 'Band')!
+    const sorted = listSongs(handle.db, { kind: 'interpreter', id: band.id }, { column: 'title', direction: 'desc' })
+    expect(sorted.map((s) => s.title)).toEqual(['Zebra', 'apple'])
+  })
+
   it('filters by category including the virtual "no category"', () => {
     const rock = listCategories(handle.db).items.find((c) => c.name === 'Rock')!
     expect(listSongs(handle.db, { kind: 'category', id: rock.id }).map((s) => s.title)).toEqual(['Zebra'])

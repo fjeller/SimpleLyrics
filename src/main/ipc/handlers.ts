@@ -9,7 +9,7 @@ import { getTheme, setTheme } from '../settings'
 import { exportSongsToFile, importSongsFromFile } from '../transferFiles'
 import { printPage } from '../printing'
 import type { ApiResult } from '../../shared/types'
-import { formatValidationError, idSchema, nameSchema, songFilterSchema, songInputSchema, themeSchema } from './validation'
+import { formatValidationError, idSchema, nameSchema, songFilterSchema, songInputSchema, songSortSchema, themeSchema } from './validation'
 
 function parse<T>(schema: z.ZodType<T>, value: unknown): T {
   const result = schema.safeParse(value)
@@ -45,7 +45,7 @@ export function registerIpcHandlers(): void {
   handle('file:openRecent', (_e, path) => openPath(parse(z.string().min(1), path)))
   handle('file:saveAs', (event) => saveAs(windowOf(event)))
 
-  handle('songs:list', (_e, filter) => listSongs(getHandle().db, parse(songFilterSchema, filter)))
+  handle('songs:list', (_e, filter, sort) => listSongs(getHandle().db, parse(songFilterSchema, filter), parse(songSortSchema.optional(), sort)))
   handle('songs:get', (_e, id) => getSong(getHandle().db, parse(idSchema, id)))
   handle('songs:create', (_e, input) => createSong(getHandle().db, parse(songInputSchema, input)))
   handle('songs:update', (_e, id, input) => updateSong(getHandle().db, parse(idSchema, id), parse(songInputSchema, input)))

@@ -13,7 +13,7 @@ const api: SimpleLyricsApi = {
     saveAs: () => call('file:saveAs')
   },
   songs: {
-    list: (filter) => call('songs:list', filter),
+    list: (filter, sort) => call('songs:list', filter, sort),
     get: (id) => call('songs:get', id),
     create: (input) => call('songs:create', input),
     update: (id, input) => call('songs:update', id, input),

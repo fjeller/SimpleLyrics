@@ -35,6 +35,11 @@ export const songFilterSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('search'), term: z.string().max(LIMITS.title * 2) })
 ])
 
+export const songSortSchema = z.object({
+  column: z.enum(['title', 'interpreters', 'category']),
+  direction: z.enum(['asc', 'desc'])
+})
+
 export const songInputSchema = z.object({
   title: z
     .string()

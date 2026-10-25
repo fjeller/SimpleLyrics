@@ -1,17 +1,31 @@
 import { useEffect, useRef } from 'react'
 import type { KeyboardEvent } from 'react'
-import type { SongListItem } from '../../../shared/types'
+import type { SongListItem, SongSort, SongSortColumn } from '../../../shared/types'
 
 interface SongTableProps {
   songs: SongListItem[]
   selectedId: number | null
   emptyText: string
+  sort: SongSort
+  onSortChange: (column: SongSortColumn) => void
   onSelect: (id: number) => void
   onOpen: (id: number) => void
   onDelete: (song: SongListItem) => void
 }
 
-export function SongTable({ songs, selectedId, emptyText, onSelect, onOpen, onDelete }: SongTableProps): React.JSX.Element {
+function SortHeader({ column, label, sort, onSortChange }: { column: SongSortColumn; label: string; sort: SongSort; onSortChange: (column: SongSortColumn) => void }): React.JSX.Element {
+  const active = sort.column === column
+  return (
+    <span role="columnheader" aria-sort={active ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none'}>
+      <button type="button" className="sort-button" onClick={() => onSortChange(column)} title={`Sort by ${label.toLowerCase()}`}>
+        {label}
+        {active && <span aria-hidden="true"> {sort.direction === 'asc' ? '\u25B2' : '\u25BC'}</span>}
+      </button>
+    </span>
+  )
+}
+
+export function SongTable({ songs, selectedId, emptyText, sort, onSortChange, onSelect, onOpen, onDelete }: SongTableProps): React.JSX.Element {
   const bodyRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -51,9 +65,9 @@ export function SongTable({ songs, selectedId, emptyText, onSelect, onOpen, onDe
   return (
     <div className="song-table" role="grid" aria-label="Songs" aria-rowcount={songs.length}>
       <div className="song-header" role="row">
-        <span role="columnheader">Title</span>
-        <span role="columnheader">Interpreter(s)</span>
-        <span role="columnheader">Category</span>
+        <SortHeader column="title" label="Title" sort={sort} onSortChange={onSortChange} />
+        <SortHeader column="interpreters" label="Interpreter(s)" sort={sort} onSortChange={onSortChange} />
+        <SortHeader column="category" label="Category" sort={sort} onSortChange={onSortChange} />
         <span role="columnheader" className="capo-col">
           Capo
         </span>

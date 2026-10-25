@@ -30,7 +30,7 @@ The automated tests cover the data layer, not these areas:
 | Idea | Notes |
 |---|---|
 | Import conflict modes | Alternatives to "skip": update the existing song, keep both when the content differs, or ask per song. |
-| Sort by column | Sort the song list by title, interpreter, category or capo. |
+| More sort options | Sort by capo or first line, sort by several columns, or remember the sort across restarts. |
 | Chord transposition | Transpose chords and the key by a number of semitones. Needs a parser for chord notation. |
 | Print several songs | Print the selection or a whole category in one job. |
 | Key on the print sheet | Show the key (and original key) on the sheet next to the capo. |

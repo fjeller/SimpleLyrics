@@ -9,6 +9,7 @@ The UI language is English.
 - One songbook per file: each database is a `.sng` file that you can copy, back up or move.
 - Songs with title, key, original key, first line, capo (0–12), chords, lyrics, one category and any number of interpreters.
 - Sidebar to browse by category or interpreter, with song counts.
+- Sort the song list by title, interpreters or category.
 - Search by title and first line, from 3 characters, with Unicode-aware matching.
 - Preview and print of a single song (black on white, A4 layout, auto-fitted font size).
 - Chord diagrams for the chords used in a song, shown above the chords text in the preview and print-out.

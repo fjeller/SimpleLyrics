@@ -6,7 +6,7 @@
 |---|---|
 | `npm run dev` | Development mode with HMR |
 | `npm start` | Preview of the built app (`electron-vite preview`) |
-| `npm test` | Vitest, single run (60 tests: repositories, files, export/import, chords, circle of fifths, tabs) |
+| `npm test` | Vitest, single run (65 tests: repositories, files, export/import, sorting, chords, circle of fifths, tabs) |
 | `npm run typecheck` | Typecheck for main (`tsconfig.node.json`) and renderer (`tsconfig.web.json`) |
 | `npm run build` | Typecheck and production build into `out/` |
 | `npm run pack` | Build and create an unpacked Windows app in `dist/win-unpacked` |

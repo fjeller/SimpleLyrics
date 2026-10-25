@@ -50,6 +50,8 @@ The category and interpreter are created together with the song. You are back on
 
 The list filters on every keystroke. The search covers the whole file and ignores the sidebar selection.
 
+To change the order of the list, click a column header such as **Interpreter(s)** or **Category**. Click it again to reverse the order.
+
 ![The song list with the category sidebar](images/song-list.png)
 
 ## 4. Preview, chord diagrams and print
