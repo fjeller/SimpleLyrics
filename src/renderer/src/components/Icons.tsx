@@ -78,6 +78,14 @@ export const PreviewSongIcon = (): React.JSX.Element => (
   </Icon>
 )
 
+export const SetlistsIcon = (): React.JSX.Element => (
+  <Icon>
+    <path d="M9 6h11M9 12h11M9 18h11" />
+    <path d="M4 6h.01M4 18h.01" strokeWidth="3" />
+    <path d="M3 12h3" />
+  </Icon>
+)
+
 export const CircleOfFifthsIcon = (): React.JSX.Element => (
   <Icon>
     <circle cx="12" cy="12" r="9" />

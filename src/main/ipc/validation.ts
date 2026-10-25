@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { EXPORT_FORMAT, EXPORT_VERSION, LIMITS } from '../../shared/types'
-import type { ExportedSong } from '../../shared/types'
+import type { ExportedSetlist, ExportedSong } from '../../shared/types'
 import { UserError } from '../errors'
 
 const id = z.number().int().positive()
@@ -39,6 +39,10 @@ export const songSortSchema = z.object({
   column: z.enum(['title', 'interpreters', 'category']),
   direction: z.enum(['asc', 'desc'])
 })
+
+export const setlistItemsSchema = z
+  .array(z.discriminatedUnion('kind', [z.object({ kind: z.literal('song'), songId: id }), z.object({ kind: z.literal('break') })]))
+  .max(2000, 'A setlist can have at most 2000 entries.')
 
 export const songInputSchema = z.object({
   title: z
@@ -87,19 +91,38 @@ const nameList = (label: string) =>
     z.array(z.string().transform((v) => v.trim()).pipe(z.string().max(LIMITS.name, `A ${label} name must not exceed ${LIMITS.name} characters.`))).max(100_000)
   )
 
+const exportedSetlistSchema = z.object({
+  name: name,
+  items: z
+    .array(
+      z.discriminatedUnion('kind', [
+        z.object({
+          kind: z.literal('song'),
+          title: z.string().transform((v) => v.trim()),
+          interpreters: z.preprocess((v) => v ?? [], z.array(z.string()).max(200))
+        }),
+        z.object({ kind: z.literal('break') })
+      ]),
+      'The setlist has no list of entries.'
+    )
+    .max(2000)
+})
+
 const exportFileSchema = z.object({
   format: z.literal(EXPORT_FORMAT, 'This is not a SimpleLyrics song export.'),
   version: z.literal(EXPORT_VERSION, 'This export was created by an unsupported version.'),
   songs: z.array(z.unknown(), 'The file contains no song list.').max(100_000),
   categories: nameList('category'),
-  interpreters: nameList('interpreter')
+  interpreters: nameList('interpreter'),
+  setlists: z.preprocess((v) => v ?? [], z.array(z.unknown(), 'The setlists entry must be a list.').max(10_000))
 })
 
 export interface ParsedSongExport {
   songs: ExportedSong[]
   categories: string[]
   interpreters: string[]
-  /** Songs that failed validation, e.g. "Song 2 (Title): Capo must be between 0 and 12." */
+  setlists: ExportedSetlist[]
+  /** Songs and setlists that failed validation, e.g. "Song 2 (Title): Capo must be between 0 and 12." */
   invalid: string[]
 }
 
@@ -125,5 +148,16 @@ export function parseSongExport(text: string): ParsedSongExport {
     const rawTitle = typeof (raw as { title?: unknown } | null)?.title === 'string' ? (raw as { title: string }).title.trim().slice(0, 60) : ''
     invalid.push(`Song ${index + 1}${rawTitle ? ` (${rawTitle})` : ''}: ${formatValidationError(song.error)}`)
   })
-  return { songs, invalid, categories: file.data.categories as string[], interpreters: file.data.interpreters as string[] }
+
+  const setlists: ExportedSetlist[] = []
+  file.data.setlists.forEach((raw, index) => {
+    const setlist = exportedSetlistSchema.safeParse(raw)
+    if (setlist.success) {
+      setlists.push(setlist.data)
+      return
+    }
+    const rawName = typeof (raw as { name?: unknown } | null)?.name === 'string' ? (raw as { name: string }).name.trim().slice(0, 60) : ''
+    invalid.push(`Setlist ${index + 1}${rawName ? ` (${rawName})` : ''}: ${formatValidationError(setlist.error)}`)
+  })
+  return { songs, invalid, setlists, categories: file.data.categories as string[], interpreters: file.data.interpreters as string[] }
 }

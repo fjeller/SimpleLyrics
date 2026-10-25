@@ -5,11 +5,12 @@ import { getCurrentFile, getHandle, getRecent, newFile, openFile, openPath, save
 import { createCategory, deleteCategory, listCategories, renameCategory } from '../repositories/categories'
 import { createInterpreter, deleteInterpreter, listInterpreters, renameInterpreter } from '../repositories/interpreters'
 import { createSong, deleteSong, getSong, listSongs, updateSong } from '../repositories/songs'
+import { createSetlist, deleteSetlist, duplicateSetlist, getSetlist, getSetlistForPrint, listSetlists, renameSetlist, saveSetlist, setlistUsage } from '../repositories/setlists'
 import { getTheme, setTheme } from '../settings'
 import { exportSongsToFile, importSongsFromFile } from '../transferFiles'
 import { printPage } from '../printing'
 import type { ApiResult } from '../../shared/types'
-import { formatValidationError, idSchema, nameSchema, songFilterSchema, songInputSchema, songSortSchema, themeSchema } from './validation'
+import { formatValidationError, idSchema, nameSchema, setlistItemsSchema, songFilterSchema, songInputSchema, songSortSchema, themeSchema } from './validation'
 
 function parse<T>(schema: z.ZodType<T>, value: unknown): T {
   const result = schema.safeParse(value)
@@ -60,6 +61,18 @@ export function registerIpcHandlers(): void {
   handle('interpreters:create', (_e, name) => createInterpreter(getHandle().db, parse(nameSchema, name)))
   handle('interpreters:rename', (_e, id, name) => renameInterpreter(getHandle().db, parse(idSchema, id), parse(nameSchema, name)))
   handle('interpreters:delete', (_e, id) => deleteInterpreter(getHandle().db, parse(idSchema, id)))
+
+  handle('setlists:list', () => listSetlists(getHandle().db))
+  handle('setlists:get', (_e, id) => getSetlist(getHandle().db, parse(idSchema, id)))
+  handle('setlists:getForPrint', (_e, id) => getSetlistForPrint(getHandle().db, parse(idSchema, id)))
+  handle('setlists:create', (_e, name) => createSetlist(getHandle().db, parse(nameSchema, name)))
+  handle('setlists:rename', (_e, id, name) => renameSetlist(getHandle().db, parse(idSchema, id), parse(nameSchema, name)))
+  handle('setlists:duplicate', (_e, id, name) => duplicateSetlist(getHandle().db, parse(idSchema, id), parse(nameSchema, name)))
+  handle('setlists:delete', (_e, id) => deleteSetlist(getHandle().db, parse(idSchema, id)))
+  handle('setlists:save', (_e, id, name, items) =>
+    saveSetlist(getHandle().db, parse(idSchema, id), parse(nameSchema, name), parse(setlistItemsSchema, items))
+  )
+  handle('setlists:usage', (_e, songId) => setlistUsage(getHandle().db, parse(idSchema, songId)))
 
   handle('transfer:export', (event) => exportSongsToFile(windowOf(event)))
   handle('transfer:import', (event) => importSongsFromFile(windowOf(event)))

@@ -7,6 +7,9 @@ import { ChordLookup } from './components/ChordLookup'
 import { CircleOfFifths } from './components/CircleOfFifths'
 import { NameEditDialog } from './components/NameEditDialog'
 import { SearchBar } from './components/SearchBar'
+import { SetlistEditor } from './components/SetlistEditor'
+import { SetlistPrint } from './components/SetlistPrint'
+import { SetlistsView } from './components/SetlistsView'
 import { Sidebar } from './components/Sidebar'
 import type { Selection, SidebarTab } from './components/Sidebar'
 import { SongEditor } from './components/SongEditor'
@@ -21,9 +24,17 @@ type DialogState =
   | { kind: 'add'; target: Target }
   | { kind: 'rename'; target: Target; id: number; name: string }
   | { kind: 'delete-item'; target: Target; id: number; name: string; songCount: number }
-  | { kind: 'delete-song'; song: { id: number; title: string } }
+  | { kind: 'delete-song'; song: { id: number; title: string }; setlistCount: number }
 
-type View = { mode: 'list' } | { mode: 'edit'; songId: number | null } | { mode: 'preview'; songId: number; print: boolean } | { mode: 'chords' } | { mode: 'circle' }
+type View =
+  | { mode: 'list' }
+  | { mode: 'edit'; songId: number | null }
+  | { mode: 'preview'; songId: number; print: boolean }
+  | { mode: 'chords' }
+  | { mode: 'circle' }
+  | { mode: 'setlists'; selectedId: number | null }
+  | { mode: 'setlist-edit'; setlistId: number }
+  | { mode: 'setlist-print'; setlistId: number; withSongs: boolean }
 
 function plural(count: number, noun: string): string {
   return `${count} ${noun}${count === 1 ? '' : 's'}`
@@ -169,8 +180,9 @@ export default function App(): React.JSX.Element | null {
     else if (command === 'preview-song' && file) previewSong()
     else if (command === 'print-song' && file) printSong()
     else if (command === 'focus-search' && file && view.mode === 'list') searchRef.current?.focus()
-    else if (command === 'show-chords' && view.mode !== 'edit') setView({ mode: 'chords' })
-    else if (command === 'show-circle-of-fifths' && view.mode !== 'edit') setView({ mode: 'circle' })
+    else if (command === 'show-chords' && view.mode !== 'edit' && view.mode !== 'setlist-edit') setView({ mode: 'chords' })
+    else if (command === 'show-circle-of-fifths' && view.mode !== 'edit' && view.mode !== 'setlist-edit') setView({ mode: 'circle' })
+    else if (command === 'show-setlists' && file && view.mode !== 'edit' && view.mode !== 'setlist-edit') setView({ mode: 'setlists', selectedId: null })
   }
   useEffect(() => window.api.onMenuCommand((command) => commandHandler.current(command)), [])
 
@@ -184,6 +196,15 @@ export default function App(): React.JSX.Element | null {
 
   function changeSort(column: SongSortColumn): void {
     setSort((current) => ({ column, direction: current.column === column && current.direction === 'asc' ? 'desc' : 'asc' }))
+  }
+
+  async function requestDeleteSong(song: { id: number; title: string }): Promise<void> {
+    try {
+      const setlistCount = await unwrap(window.api.setlists.usage(song.id))
+      setDialog({ kind: 'delete-song', song, setlistCount })
+    } catch (e) {
+      showError(e)
+    }
   }
 
   function changeTab(next: SidebarTab): void {
@@ -230,7 +251,7 @@ export default function App(): React.JSX.Element | null {
     <div className="shell">
       <Toolbar
         theme={theme}
-        locked={view.mode === 'edit'}
+        locked={view.mode === 'edit' || view.mode === 'setlist-edit'}
         hasFile={file !== null}
         canEdit={activeSong !== undefined}
         canDelete={activeSong !== undefined}
@@ -241,9 +262,10 @@ export default function App(): React.JSX.Element | null {
         onImportSongs={() => void runFileAction(() => unwrap(window.api.transfer.importSongs()))}
         onNewSong={() => setView({ mode: 'edit', songId: null })}
         onEditSong={() => activeSong && setView({ mode: 'edit', songId: activeSong.id })}
-        onDeleteSong={() => activeSong && setDialog({ kind: 'delete-song', song: activeSong })}
+        onDeleteSong={() => activeSong && void requestDeleteSong(activeSong)}
         onPreviewSong={previewSong}
         onPrintSong={printSong}
+        onSetlists={() => setView({ mode: 'setlists', selectedId: null })}
         onChordLookup={() => setView({ mode: 'chords' })}
         onCircleOfFifths={() => setView({ mode: 'circle' })}
         onThemeChange={changeTheme}
@@ -252,7 +274,10 @@ export default function App(): React.JSX.Element | null {
       {dialog?.kind === 'delete-song' && (
         <ConfirmDialog
           title="Delete song?"
-          message={`"${dialog.song.title}" will be permanently deleted.`}
+          message={
+            `"${dialog.song.title}" will be permanently deleted.` +
+            (dialog.setlistCount > 0 ? ` It will also be removed from ${plural(dialog.setlistCount, 'setlist')}.` : '')
+          }
           confirmLabel="Delete"
           danger
           onConfirm={() => void confirmDelete()}
@@ -273,6 +298,37 @@ export default function App(): React.JSX.Element | null {
           onNew={() => void runFileAction(() => unwrap(window.api.file.newFile()))}
           onOpen={() => void runFileAction(() => unwrap(window.api.file.openFile()))}
           onOpenRecent={(path) => void runFileAction(() => unwrap(window.api.file.openRecent(path)))}
+        />
+      </>
+    )
+  }
+
+  if (view.mode === 'setlists') {
+    return shell(
+      <SetlistsView
+        initialSelectedId={view.selectedId}
+        onClose={() => setView({ mode: 'list' })}
+        onEdit={(id) => setView({ mode: 'setlist-edit', setlistId: id })}
+        onPrint={(id, withSongs) => setView({ mode: 'setlist-print', setlistId: id, withSongs })}
+      />
+    )
+  }
+
+  if (view.mode === 'setlist-edit') {
+    const back = (): void => setView({ mode: 'setlists', selectedId: view.setlistId })
+    return shell(<SetlistEditor key={view.setlistId} setlistId={view.setlistId} onClose={back} onSaved={back} />)
+  }
+
+  if (view.mode === 'setlist-print') {
+    return shell(
+      <>
+        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} />}
+        <SetlistPrint
+          key={`${view.setlistId}-${view.withSongs}`}
+          setlistId={view.setlistId}
+          withSongs={view.withSongs}
+          onPrintRequested={() => void printPage()}
+          onClose={() => setView({ mode: 'setlists', selectedId: view.setlistId })}
         />
       </>
     )
@@ -348,7 +404,7 @@ export default function App(): React.JSX.Element | null {
           onSortChange={changeSort}
           onSelect={setSelectedSongId}
           onOpen={(id) => setView({ mode: 'edit', songId: id })}
-          onDelete={(song) => setDialog({ kind: 'delete-song', song })}
+          onDelete={(song) => void requestDeleteSong(song)}
         />
         <footer className="statusbar">{plural(songs.length, 'song')}</footer>
       </main>

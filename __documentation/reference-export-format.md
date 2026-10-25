@@ -1,8 +1,8 @@
 # Reference: Export file format
 
-The export is a UTF-8 JSON file, written with 2-space indentation. Songs reference their category and interpreters by name, so an export can be imported into any songbook.
+The export is a UTF-8 JSON file, written with 2-space indentation. Songs reference their category and interpreters by name, and setlists reference their songs by title and interpreters, so an export can be imported into any songbook.
 
-Types: `SongExport` and `ExportedSong` in [src/shared/types.ts](../src/shared/types.ts). Validation: [src/main/ipc/validation.ts](../src/main/ipc/validation.ts).
+Types: `SongExport`, `ExportedSong` and `ExportedSetlist` in [src/shared/types.ts](../src/shared/types.ts). Validation: [src/main/ipc/validation.ts](../src/main/ipc/validation.ts).
 
 ## Top-level object
 
@@ -14,6 +14,7 @@ Types: `SongExport` and `ExportedSong` in [src/shared/types.ts](../src/shared/ty
 | `categories` | string[] | No | All category names, including empty categories. Default `[]`. |
 | `interpreters` | string[] | No | All interpreter names, including unused ones. Default `[]`. |
 | `songs` | object[] | Yes | List of songs. |
+| `setlists` | object[] | No | List of setlists. Default `[]`. Exports from versions before setlists existed have none. |
 
 ## Song object
 
@@ -30,6 +31,20 @@ Types: `SongExport` and `ExportedSong` in [src/shared/types.ts](../src/shared/ty
 | `interpreters` | string[] | No | Interpreter names, created if missing. Default `[]`. |
 
 Missing optional fields are treated as `null` (or `0` / `[]`).
+
+## Setlist object
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | string | Yes | 1–200 characters after trimming. |
+| `items` | object[] | Yes | Songs and breaks in order, at most 2000. |
+
+Items:
+
+| `kind` | Other fields | Description |
+|---|---|---|
+| `"song"` | `title` (string), `interpreters` (string[], default `[]`) | A song, found by title (case-insensitive) and the same set of interpreters. |
+| `"break"` | none | A break; it starts the next set. |
 
 ## Example
 
@@ -52,6 +67,16 @@ Missing optional fields are treated as `null` (or `0` / `[]`).
       "category": "Folk",
       "interpreters": ["Traditional"]
     }
+  ],
+  "setlists": [
+    {
+      "name": "Pub gig",
+      "items": [
+        { "kind": "song", "title": "Example Song", "interpreters": ["Traditional"] },
+        { "kind": "break" },
+        { "kind": "song", "title": "Example Song", "interpreters": ["Traditional"] }
+      ]
+    }
   ]
 }
 ```
@@ -64,5 +89,10 @@ Missing optional fields are treated as `null` (or `0` / `[]`).
 | A song fails validation | That song is skipped and reported, others are imported. |
 | Same title (case-insensitive) and same interpreter set as an existing song | Song skipped. |
 | Unknown category or interpreter | Created. |
+| A setlist fails validation | That setlist is skipped and reported, the rest is imported. |
+| A setlist with the same name (case-insensitive) exists | The setlist is imported under a numbered name: "Pub gig (2)", "Pub gig (3)", … |
+| A setlist song is not in the file after the song import | The entry is left out and reported per setlist. |
+
+Setlists are imported after the songs, in the same transaction. Their songs are looked up among all songs of the file, so a setlist can also point to a song that was skipped as a duplicate.
 
 Details and user steps: [How to export and import songs](how-to-export-import-songs.md).

@@ -31,6 +31,17 @@ const api: SimpleLyricsApi = {
     rename: (id, name) => call('interpreters:rename', id, name),
     delete: (id) => call('interpreters:delete', id)
   },
+  setlists: {
+    list: () => call('setlists:list'),
+    get: (id) => call('setlists:get', id),
+    getForPrint: (id) => call('setlists:getForPrint', id),
+    create: (name) => call('setlists:create', name),
+    rename: (id, name) => call('setlists:rename', id, name),
+    duplicate: (id, name) => call('setlists:duplicate', id, name),
+    delete: (id) => call('setlists:delete', id),
+    save: (id, name, items) => call('setlists:save', id, name, items),
+    usage: (songId) => call('setlists:usage', songId)
+  },
   transfer: {
     exportSongs: () => call('transfer:export'),
     importSongs: () => call('transfer:import')

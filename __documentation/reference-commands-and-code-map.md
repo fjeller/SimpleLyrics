@@ -6,7 +6,7 @@
 |---|---|
 | `npm run dev` | Development mode with HMR |
 | `npm start` | Preview of the built app (`electron-vite preview`) |
-| `npm test` | Vitest, single run (65 tests: repositories, files, export/import, sorting, chords, circle of fifths, tabs) |
+| `npm test` | Vitest, single run (84 tests: repositories, files, export/import, sorting, setlists, chords, circle of fifths, tabs) |
 | `npm run typecheck` | Typecheck for main (`tsconfig.node.json`) and renderer (`tsconfig.web.json`) |
 | `npm run build` | Typecheck and production build into `out/` |
 | `npm run pack` | Build and create an unpacked Windows app in `dist/win-unpacked` |
@@ -55,12 +55,13 @@ The runtime dependencies are `better-sqlite3`, `drizzle-orm` and `zod`. React, r
 | `src/shared/types.ts` | DTOs, limits, API interface, export format |
 | `src/shared/chords.ts` | Chord name parser, extraction of chords from text, fingering tables and shape generation |
 | `src/shared/circleOfFifths.ts` | The 12 keys of the circle of fifths and the chords of each key |
+| `src/shared/setlists.ts` | Splitting a setlist into sets and removing breaks that would create empty sets |
 | `src/shared/tabs.ts` | Detection of guitar tabs in a song text and their parsing into drawable rows |
 | `src/renderer/src/App.tsx` | State and views (list, edit, preview) |
 | `src/renderer/src/api.ts` | Access to `window.api` |
-| `src/renderer/src/components/` | `Toolbar`, `Icons`, `Sidebar`, `SongTable`, `SongEditor`, `SongPreview`, `ChordDiagram`, `ChordLookup`, `CircleOfFifths`, `TabDiagram`, `SearchBar`, `Dialogs`, `NameEditDialog`, `WelcomeScreen` |
+| `src/renderer/src/components/` | `Toolbar`, `Icons`, `Sidebar`, `SongTable`, `SongEditor`, `SongPreview`, `ChordDiagram`, `ChordLookup`, `CircleOfFifths`, `TabDiagram`, `SetlistsView`, `SetlistEditor`, `SetlistPrint`, `SearchBar`, `Dialogs`, `NameEditDialog`, `WelcomeScreen` |
 | `src/renderer/src/styles.css` | Styles, including `@media print` |
-| `tests/` | `repositories.test.ts`, `transfer.test.ts`, `chords.test.ts`, `chordLookup.test.ts`, `circleOfFifths.test.ts`, `tabs.test.ts` |
+| `tests/` | `repositories.test.ts`, `transfer.test.ts`, `chords.test.ts`, `chordLookup.test.ts`, `circleOfFifths.test.ts`, `tabs.test.ts`, `setlists.test.ts` |
 | `drizzle/` | SQL migrations and snapshots |
 
 ### Configuration files

@@ -53,6 +53,35 @@ Links songs and interpreters (n:m).
 
 The primary key is (`song_id`, `interpreter_id`).
 
+### `setlists`
+
+| Column | Type | Notes |
+|---|---|---|
+| `id` | integer | Primary key, autoincrement |
+| `name` | text | Not null, max 200 characters, unique index with `COLLATE NOCASE` |
+| `created_at` | text | Default `CURRENT_TIMESTAMP` |
+| `updated_at` | text | Default `CURRENT_TIMESTAMP`, set on every save |
+
+### `setlist_items`
+
+The songs and breaks of a setlist, in order. Sets are not stored: the songs between two breaks form a set.
+
+| Column | Type | Notes |
+|---|---|---|
+| `id` | integer | Primary key, autoincrement |
+| `setlist_id` | integer | Not null, references `setlists.id`, on delete cascade |
+| `position` | integer | Not null, 0-based order; unique per setlist |
+| `kind` | text | `song` or `break` |
+| `song_id` | integer | References `songs.id`, on delete cascade. Set for songs, null for breaks (check constraint) |
+
+Indexes: `setlist_items_position_idx` (unique, on `setlist_id` and `position`), `setlist_items_song_idx` on `song_id`.
+
+- A song can appear in several setlists, and more than once in the same setlist.
+- Deleting a song removes it from every setlist. Deleting a setlist keeps the songs.
+- Saving a setlist rewrites all its items in one transaction. Breaks at the start or end, and breaks directly after another break, are removed, because they would create empty sets.
+
+Existing files get the two tables automatically when they are opened (migration `0001_setlists`).
+
 ## Limits
 
 Defined in `LIMITS` in [src/shared/types.ts](../src/shared/types.ts).
@@ -69,12 +98,14 @@ Defined in `LIMITS` in [src/shared/types.ts](../src/shared/types.ts).
 | Song text | Unlimited |
 | Import file size | 100 MB |
 | Songs per import file | 100,000 |
+| Setlist name | 200 characters |
+| Entries per setlist (songs and breaks) | 2000 |
 
 Text values are trimmed (the chords field is not, to keep chord spacing); empty or whitespace-only values are stored as null.
 
 ## Uniqueness
 
-Category names and interpreter names are unique, ignoring case. The check is done in JavaScript with Unicode-aware normalisation. The `NOCASE` index is an additional safety net for ASCII.
+Category names, interpreter names and setlist names are unique, ignoring case. The check is done in JavaScript with Unicode-aware normalisation. The `NOCASE` index is an additional safety net for ASCII.
 
 Songs have no uniqueness constraint. The import treats the same title and the same set of interpreters as a duplicate (see [How to export and import songs](how-to-export-import-songs.md)).
 

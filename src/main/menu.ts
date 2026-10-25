@@ -53,7 +53,9 @@ export function buildMenu(getWindow: WindowGetter, hasOpenFile: boolean): void {
         { label: 'New Song', accelerator: 'CmdOrCtrl+N', enabled: hasOpenFile, click: () => send('new-song') },
         { label: 'Preview Song', accelerator: 'CmdOrCtrl+Shift+P', enabled: hasOpenFile, click: () => send('preview-song') },
         { label: 'Print Song...', accelerator: 'CmdOrCtrl+P', enabled: hasOpenFile, click: () => send('print-song') },
-        { label: 'Search', accelerator: 'CmdOrCtrl+F', enabled: hasOpenFile, click: () => send('focus-search') }
+        { label: 'Search', accelerator: 'CmdOrCtrl+F', enabled: hasOpenFile, click: () => send('focus-search') },
+        { type: 'separator' },
+        { label: 'Setlists...', accelerator: 'CmdOrCtrl+L', enabled: hasOpenFile, click: () => send('show-setlists') }
       ]
     },
     {
